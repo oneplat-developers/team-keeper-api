@@ -29,8 +29,8 @@ allprojects {
     apply(plugin: 'io.spring.dependency-management')
 
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
     }
 
     jar {
