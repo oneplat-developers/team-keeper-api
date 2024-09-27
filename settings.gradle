@@ -5,7 +5,7 @@ include(
         ':attendance',
 )
 
-rootProject.children.forEach {it ->
+rootProject.children.each {it ->
     // Enables to refer to each project without parent directory.
     it.projectDir = file("module/$it.name")
     // Changes build filename of subprojects.
