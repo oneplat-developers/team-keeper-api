@@ -1,0 +1,13 @@
+rootProject.name = 'team-keeper'
+
+include(
+        ':entity',
+        ':attendance',
+)
+
+rootProject.children.forEach {it ->
+    // Enables to refer to each project without parent directory.
+    it.projectDir = file("module/$it.name")
+    // Changes build filename of subprojects.
+    it.buildFileName = "$it.name-build.gradle"
+}

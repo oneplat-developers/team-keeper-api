@@ -1,0 +1,116 @@
+buildscript {
+    ext {
+        versions = [
+                lombok           : "1.18.20",
+                reflections      : "0.9.12",
+                bytebuddy        : "1.11.12",
+                typetools        : "0.6.3",
+                jsqlparser       : "4.0",
+                jackson          : "2.12.3",
+                mybatis          : "3.5.7",
+                mybatisSpringBoot: "2.2.0",
+                springframework  : "5.3.9",
+                springBoot       : "2.5.3",
+                junit5           : "5.7.2",
+                assertj          : "3.20.2",
+        ]
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'java-library' // For using "api"; https://jongmin92.github.io/2019/05/09/Gradle/gradle-api-vs-implementation
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+allprojects {
+    group = 'co.oneplat.teamkeeper'
+    version = '0.1.0'
+}
+
+configure(subprojects) { it ->
+    apply(plugin: 'java')
+    apply(plugin: 'java-library')
+
+    // Prevents error from occurring "unmappable character for encoding MS949".
+//    [compileJava, compileTestJava]*.options*.encoding = StandardCharsets.UTF_8
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation(group: "org.junit.jupiter", name: "junit-jupiter-api", version: versions.junit5)
+        testRuntimeOnly(group: "org.junit.jupiter", name: "junit-jupiter-engine", version: versions.junit5)
+        testImplementation(group: "org.junit.jupiter", name: "junit-jupiter-params", version: versions.junit5)
+        testImplementation(group: "org.assertj", name: "assertj-core", version: versions.assertj)
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs << '-parameters'
+    }
+
+    tasks.withType(GroovyCompile).configureEach {
+        options.compilerArgs << '-parameters'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.okta.spring:okta-spring-boot-starter:3.0.7'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+wrapper {
+    gradleVersion = '8.10.2'
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+jar {
+    enabled = true
+}
