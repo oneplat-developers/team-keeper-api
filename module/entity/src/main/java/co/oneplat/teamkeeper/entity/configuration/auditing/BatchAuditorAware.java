@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.entity;
+package co.oneplat.teamkeeper.entity.configuration.auditing;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.util.Optional;
 
-@SpringBootApplication
-public class TeamKeeperEntityApplication {
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.util.StringUtils;
 
-    public static void main(String[] args) {
-        SpringApplication.run(TeamKeeperEntityApplication.class, args);
+public class BatchAuditorAware implements AuditorAware<String> {
+
+    private static final InheritableThreadLocal<String> auditorHolder = new InheritableThreadLocal<>();
+
+    @Override
+    public Optional<String> getCurrentAuditor() {
+        String userId = auditorHolder.get();
+
+        if (!StringUtils.hasText(userId)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(userId);
     }
 
 }
