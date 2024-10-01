@@ -1,4 +1,4 @@
-<code_scheme name="github-javaxcel-style" version="173">
+<code_scheme name="teamkeeper-style" version="173">
   <option name="FORMATTER_TAGS_ENABLED" value="true" />
   <GroovyCodeStyleSettings>
     <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
@@ -13,6 +13,8 @@
         <emptyLine />
         <package name="javax" withSubpackages="true" static="false" />
         <emptyLine />
+        <package name="jakarta" withSubpackages="true" static="false" />
+        <emptyLine />
         <package name="org" withSubpackages="true" static="false" />
         <emptyLine />
         <package name="net" withSubpackages="true" static="false" />
@@ -21,10 +23,9 @@
         <emptyLine />
         <package name="" withSubpackages="true" static="false" />
         <emptyLine />
-        <package name="com.github.javaxcel" withSubpackages="true" static="false" />
+        <package name="co.oneplat.teamkeeper" withSubpackages="true" static="false" />
         <emptyLine />
         <package name="" withSubpackages="true" static="true" />
-        <emptyLine />
       </value>
     </option>
   </GroovyCodeStyleSettings>
@@ -38,6 +39,8 @@
         <emptyLine />
         <package name="javax" withSubpackages="true" static="false" />
         <emptyLine />
+        <package name="jakarta" withSubpackages="true" static="false" />
+        <emptyLine />
         <package name="org" withSubpackages="true" static="false" />
         <emptyLine />
         <package name="net" withSubpackages="true" static="false" />
@@ -46,10 +49,9 @@
         <emptyLine />
         <package name="" withSubpackages="true" static="false" />
         <emptyLine />
-        <package name="com.github.javaxcel" withSubpackages="true" static="false" />
+        <package name="co.oneplat.teamkeeper" withSubpackages="true" static="false" />
         <emptyLine />
         <package name="" withSubpackages="true" static="true" />
-        <emptyLine />
       </value>
     </option>
     <option name="ENABLE_JAVADOC_FORMATTING" value="false" />
