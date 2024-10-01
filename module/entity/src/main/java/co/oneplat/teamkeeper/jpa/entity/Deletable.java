@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.entity.configuration;
+package co.oneplat.teamkeeper.jpa.entity;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+public interface Deletable {
 
-import co.oneplat.teamkeeper.entity.configuration.auditing.SecurityContextAuditorAware;
+    boolean isDeleted();
 
-@Configuration
-@EnableJpaAuditing
-public class JpaConfiguration {
-
-    @Bean
-    public AuditorAware<String> auditorProvider() {
-        return new SecurityContextAuditorAware();
-    }
+    void delete();
 
 }

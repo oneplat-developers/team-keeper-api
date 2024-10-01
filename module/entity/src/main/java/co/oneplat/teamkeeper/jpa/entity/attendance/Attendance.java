@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.entity.attendance;
+package co.oneplat.teamkeeper.jpa.entity.attendance;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import co.oneplat.teamkeeper.entity.user.User;
-import co.oneplat.teamkeeper.entity.base.AbstractAuditableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,15 +28,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import co.oneplat.teamkeeper.jpa.entity.base.AbstractDeletableEntity;
+import co.oneplat.teamkeeper.jpa.entity.user.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "ATTENDANCE", uniqueConstraints = @UniqueConstraint(columnNames = {"user", "date"}))
-public class Attendance extends AbstractAuditableEntity {
+public class Attendance extends AbstractDeletableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,16 +48,16 @@ public class Attendance extends AbstractAuditableEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false, updatable = false)
     private User user;
 
-    @Column(name = "ATTEND_DATE", nullable = false)
+    @Column(name = "ATTEND_DATE", nullable = false, updatable = false)
     private LocalDate date;
 
     @Column(name = "ATTEND_START_TIME")
     private LocalTime startTime;
 
     @Column(name = "ATTEND_END_TIME")
-    private LocalDate endTime;
+    private LocalTime endTime;
 
 }

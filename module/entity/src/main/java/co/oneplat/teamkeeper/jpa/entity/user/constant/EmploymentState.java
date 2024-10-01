@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.entity.user;
+package co.oneplat.teamkeeper.jpa.entity.user.constant;
 
-import co.oneplat.teamkeeper.entity.base.AbstractAuditableEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Entity
-@Table(name = "USER")
-public class User extends AbstractAuditableEntity {
+@RequiredArgsConstructor
+public enum EmploymentState {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    ACTIVE("ACTIVE", "재직중"),
+
+    ON_LEAVE("ON_LEAVE", "휴직중"),
+
+    SUSPENDED("SUSPENDED", "정직"),
+
+    RESIGNED("RESIGNED", "퇴사"),
+
+    TEMPORARY("TEMPORARY", "임시직");
+
+    private final String code;
+
+    private final String name;
 
 }

@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.entity.configuration.auditing;
+package co.oneplat.teamkeeper.jpa.configuration.auditing;
 
 import java.util.Optional;
 
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.util.StringUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
-public class BatchAuditorAware implements AuditorAware<String> {
-
-    private static final InheritableThreadLocal<String> auditorHolder = new InheritableThreadLocal<>();
+public class SecurityContextAuditorAware implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
-        String userId = auditorHolder.get();
-
-        if (!StringUtils.hasText(userId)) {
-            return Optional.empty();
-        }
-
-        return Optional.of(userId);
+        return Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .filter(Authentication::isAuthenticated)
+                .map(Authentication::getPrincipal)
+                .map(User.class::cast)
+                .map(User::getUsername);
     }
 
 }
