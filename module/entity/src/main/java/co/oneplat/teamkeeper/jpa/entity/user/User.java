@@ -44,8 +44,11 @@ import co.oneplat.teamkeeper.jpa.entity.user.constant.EmploymentState;
 @Table(name = "USER")
 public class User extends AbstractDeletableEntity {
 
+    /**
+     * 사용자 아이디
+     */
     @Id
-    @Column(name = "USER_ID", nullable = false)
+    @Column(name = "USER_ID", nullable = false, updatable = false)
     private String id;
 
     /**
@@ -89,7 +92,7 @@ public class User extends AbstractDeletableEntity {
 
     @Builder
     @SuppressWarnings("unused")
-    protected User(
+    User(
             String id,
             String firstName,
             String lastName,

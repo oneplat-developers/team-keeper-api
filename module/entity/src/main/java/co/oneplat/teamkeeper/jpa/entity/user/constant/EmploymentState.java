@@ -23,15 +23,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum EmploymentState {
 
-    ACTIVE("ACTIVE", "재직중"),
+    ACTIVE("active", "재직중"),
+    ON_LEAVE("on_leave", "휴직중"),
+    SUSPENDED("suspended", "정직"),
+    RESIGNED("resigned", "퇴사");
 
-    ON_LEAVE("ON_LEAVE", "휴직중"),
-
-    SUSPENDED("SUSPENDED", "정직"),
-
-    RESIGNED("RESIGNED", "퇴사"),
-
-    TEMPORARY("TEMPORARY", "임시직");
+    // -------------------------------------------------------------------------------------------------
 
     private final String code;
 
