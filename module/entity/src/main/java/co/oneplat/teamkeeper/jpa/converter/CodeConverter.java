@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.common.exception
+package co.oneplat.teamkeeper.jpa.converter;
 
-import spock.lang.Specification
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
-import co.oneplat.teamkeeper.common.object.Code
+import co.oneplat.teamkeeper.common.object.Code;
 
-class BusinessSpec extends Specification {
+@Converter(autoApply = true)
+public class CodeConverter implements AttributeConverter<Code, String> {
 
-    def "All businesses have valid properties"() {
-        given:
-        def businesses = Business.values()
+    @Override
+    public String convertToDatabaseColumn(Code attribute) {
+        return attribute.getValue();
+    }
 
-        expect:
-        businesses.length > 0
-        businesses.every { Code.isValid(it.domain) }
-        businesses.every { it.code.matches(/^[a-z]+:[a-z]+[a-z_0-9]*$/) }
-        businesses.every { !it.errorMessage.blank }
+    @Override
+    public Code convertToEntityAttribute(String dbData) {
+        return dbData == null ? null : new Code(dbData);
     }
 
 }
