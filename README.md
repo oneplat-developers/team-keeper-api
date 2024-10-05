@@ -3,5 +3,5 @@
 This project has multiple modules to apply MSA.
 
 ```shell
-./mvnw clean install -D"maven.repo.local"=<path>
+./gradlew clean build
 ```
