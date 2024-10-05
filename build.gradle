@@ -35,16 +35,11 @@ allprojects {
 }
 
 configure(subprojects) {
-    dependencyManagement {
-    }
+    final def isRunnableProject = Boolean.parseBoolean(project.property('project.runnable').toString())
 
-    if (project.property('project.runnable') == 'true') {
+    dependencyManagement {
         dependencies {
-            // Query DSL: http://honeymon.io/tech/2020/07/09/gradle-annotation-processor-with-querydsl.html
-            implementation "com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-            annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-            annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
-            annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+            dependency 'org.spockframework:spock-core:2.3-groovy-4.0'
         }
     }
 
@@ -57,8 +52,16 @@ configure(subprojects) {
 
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
+        if (isRunnableProject) {
+            // Query DSL: http://honeymon.io/tech/2020/07/09/gradle-annotation-processor-with-querydsl.html
+            implementation "com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+            annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+            annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+            annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+        }
+
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+        testImplementation 'org.spockframework:spock-core'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
@@ -83,7 +86,7 @@ configure(subprojects) {
     }
 
     bootJar {
-        enabled = true
+        enabled = isRunnableProject
         archiveBaseName = "$rootProject.name-$project.name"
         archiveVersion = "$project.version"
     }
