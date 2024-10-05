@@ -32,10 +32,6 @@ allprojects {
         mavenCentral()
         mavenLocal()
     }
-
-    jar {
-        enabled = false
-    }
 }
 
 configure(subprojects) {
@@ -55,8 +51,8 @@ configure(subprojects) {
     dependencies {
         // Lombok
         compileOnly 'org.projectlombok:lombok'
-        testCompileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
         testAnnotationProcessor 'org.projectlombok:lombok'
 
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -80,6 +76,12 @@ configure(subprojects) {
         useJUnitPlatform()
     }
 
+    // Enables subprojects to build plain jar file; It needed to refer to other modules on another module.
+    // See https://github.com/HomoEfficio/dev-tips/blob/master/Gradle-error-package-does-not-exist.md
+    jar {
+        enabled = true
+    }
+
     bootJar {
         enabled = true
         archiveBaseName = "$rootProject.name-$project.name"
@@ -90,6 +92,10 @@ configure(subprojects) {
 wrapper {
     gradleVersion = '8.10.2'
     distributionType = Wrapper.DistributionType.BIN
+}
+
+jar {
+    enabled = false
 }
 
 bootJar {
