@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.jpa.system;
+package co.oneplat.teamkeeper.jpa.entity.system;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
