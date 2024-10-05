@@ -24,31 +24,36 @@ class CodeSpec extends Specification {
 
     def "Checks if it is valid as code"() {
         when:
-        def valid = Code.isValid(code)
+        def valid = Code.isValid(code, delimiter as char)
 
         then:
         valid == expected
 
         where:
-        code                                | expected
-        null                                | false
-        ""                                  | false
-        " "                                 | false
-        "Alpha1"                            | false
-        "GAMMA"                             | false
-        "_foo"                              | false
-        "bar_"                              | false
-        "foo__bar"                          | false
-        "lorem_ipsum/:/simply_dummy/:/text" | false
-        "edit:comment_on_content/author"    | false
-        "100_beta"                          | true
-        "alpha"                             | true
-        "omega1"                            | true
-        "beta_gamma10"                      | true
-        "a_b_c_0_1_2_3"                     | true
-        "alpha_beta_gamma"                  | true
-        "feed_animal:dog"                   | true
-        "edit:comment_on_content:author"    | true
+        code                                | delimiter           || expected
+        null                                | Character.MIN_VALUE || false
+        ""                                  | Character.MIN_VALUE || false
+        " "                                 | Character.MIN_VALUE || false
+        "Alpha1"                            | Character.MIN_VALUE || false
+        "GAMMA"                             | Character.MIN_VALUE || false
+        "_foo"                              | Character.MIN_VALUE || false
+        "bar_"                              | Character.MIN_VALUE || false
+        "foo__bar"                          | Character.MIN_VALUE || false
+        "foo:"                              | Character.MIN_VALUE || false
+        "lorem_ipsum/:/simply_dummy/:/text" | Character.MIN_VALUE || false
+        "edit:comment_on_content/author"    | Character.MIN_VALUE || false
+        "edit:comment"                      | '/'                 || false
+        "edit|comment||author"              | '|'                 || false
+        "100_beta"                          | Character.MIN_VALUE || true
+        "alpha"                             | Character.MIN_VALUE || true
+        "omega1"                            | Character.MIN_VALUE || true
+        "beta_gamma10"                      | Character.MIN_VALUE || true
+        "a_b_c_0_1_2_3"                     | Character.MIN_VALUE || true
+        "alpha_beta_gamma"                  | Character.MIN_VALUE || true
+        "feed_animal:dog"                   | Character.MIN_VALUE || true
+        "edit:comment_on_content:author"    | Character.MIN_VALUE || true
+        "edit:comment"                      | ':'                 || true
+        "edit|comment|author"               | '|'                 || true
     }
 
     def "Parses value by delimiter and returns as fragments"() {

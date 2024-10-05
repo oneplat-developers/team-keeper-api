@@ -56,6 +56,10 @@ public final class Code {
     // -------------------------------------------------------------------------------------------------
 
     public static boolean isValid(@Nullable String value) {
+        return isValid(value, Character.MIN_VALUE);
+    }
+
+    public static boolean isValid(@Nullable String value, char delimiter) {
         if (!StringUtils.hasText(value)) {
             return false;
         }
@@ -64,7 +68,7 @@ public final class Code {
 
         int fragmentCount = -1;
         int totalFragmentsLength = 0;
-        char previousDelimiter = Character.MIN_VALUE;
+        char previousDelimiter = delimiter;
 
         while (matcher.find()) {
             fragmentCount++;
@@ -74,13 +78,13 @@ public final class Code {
 
             int previousMatchedIndex = matcher.start();
             if (previousMatchedIndex > 0) {
-                char delimiter = value.charAt(previousMatchedIndex - 1);
+                char delim = value.charAt(previousMatchedIndex - 1);
 
-                if (previousDelimiter != Character.MIN_VALUE && previousDelimiter != delimiter) {
+                if (previousDelimiter != Character.MIN_VALUE && previousDelimiter != delim) {
                     return false;
                 }
 
-                previousDelimiter = delimiter;
+                previousDelimiter = delim;
             }
         }
 
