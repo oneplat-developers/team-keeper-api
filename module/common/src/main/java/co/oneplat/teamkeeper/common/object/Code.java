@@ -16,6 +16,9 @@
 
 package co.oneplat.teamkeeper.common.object;
 
+import java.util.List;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jakarta.annotation.Nullable;
@@ -34,15 +37,17 @@ import co.oneplat.teamkeeper.common.exception.BusinessException;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class Code {
 
-    private static final Pattern CODE_PATTERN = Pattern.compile("^[a-z][a-z0-9]*(_[a-z0-9]+)*$");
+    private static final Pattern FRAGMENT_PATTERN = Pattern.compile("[a-z0-9]+(?:_[a-z0-9]+)*");
 
     @JsonValue
     @EqualsAndHashCode.Include
     private final String value;
 
+    // -------------------------------------------------------------------------------------------------
+
     public Code(@Nullable String value) {
         if (!isValid(value)) {
-            throw new BusinessException(Business.PARSE_CODE_OBJECT);
+            throw new BusinessException(Business.PARSE_CODE_OBJECT, String.format("올바른 형식의 코드가 아닙니다: '%s'", value));
         }
 
         this.value = value;
@@ -55,7 +60,35 @@ public final class Code {
             return false;
         }
 
-        return CODE_PATTERN.matcher(value).matches();
+        Matcher matcher = FRAGMENT_PATTERN.matcher(value);
+
+        int fragmentCount = -1;
+        int totalFragmentsLength = 0;
+        char previousDelimiter = Character.MIN_VALUE;
+
+        while (matcher.find()) {
+            fragmentCount++;
+
+            String fragment = matcher.group();
+            totalFragmentsLength += fragment.length();
+
+            int previousMatchedIndex = matcher.start();
+            if (previousMatchedIndex > 0) {
+                char delimiter = value.charAt(previousMatchedIndex - 1);
+
+                if (previousDelimiter != Character.MIN_VALUE && previousDelimiter != delimiter) {
+                    return false;
+                }
+
+                previousDelimiter = delimiter;
+            }
+        }
+
+        return value.length() == fragmentCount + totalFragmentsLength;
+    }
+
+    public List<String> getFragments() {
+        return FRAGMENT_PATTERN.matcher(this.value).results().map(MatchResult::group).toList();
     }
 
 }

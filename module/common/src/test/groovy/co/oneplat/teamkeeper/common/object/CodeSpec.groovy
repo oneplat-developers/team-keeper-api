@@ -30,19 +30,41 @@ class CodeSpec extends Specification {
         valid == expected
 
         where:
-        code               || expected
-        null               || false
-        ""                 || false
-        " "                || false
-        "Alpha1"           || false
-        "100_beta"         || false
-        "GAMMA"            || false
-        "foo__bar"         || false
-        "feed:dog"         || false
-        "alpha"            || true
-        "omega1"           || true
-        "beta_gamma10"     || true
-        "alpha_beta_gamma" || true
+        code                                | expected
+        null                                | false
+        ""                                  | false
+        " "                                 | false
+        "Alpha1"                            | false
+        "GAMMA"                             | false
+        "_foo"                              | false
+        "bar_"                              | false
+        "foo__bar"                          | false
+        "lorem_ipsum/:/simply_dummy/:/text" | false
+        "edit:comment_on_content/author"    | false
+        "100_beta"                          | true
+        "alpha"                             | true
+        "omega1"                            | true
+        "beta_gamma10"                      | true
+        "a_b_c_0_1_2_3"                     | true
+        "alpha_beta_gamma"                  | true
+        "feed_animal:dog"                   | true
+        "edit:comment_on_content:author"    | true
+    }
+
+    def "Parses value by delimiter and returns as fragments"() {
+        given:
+        def code = new Code(value)
+
+        expect:
+        code.fragments == expected
+
+        where:
+        value                         | expected
+        "foo"                         | ["foo"]
+        "foo_bar"                     | ["foo_bar"]
+        "foo:bar"                     | ["foo", "bar"]
+        "alpha_beta/gamma_delta/zeta" | ["alpha_beta", "gamma_delta", "zeta"]
+        "01.02.03.04.05"              | ["01", "02", "03", "04", "05"]
     }
 
     def "Converts to JSON as its value"() {
@@ -56,7 +78,7 @@ class CodeSpec extends Specification {
         json == "\"$value\""
 
         where:
-        value << ["alpha", "foo_bar", "beta_100_gamma", "z_e_t_a_0_1_2"]
+        value << ["alpha", "foo_bar", "beta:100_gamma", "z_e_t_a_0_1_2"]
     }
 
     def "Converts to object as its value"() {
@@ -71,7 +93,7 @@ class CodeSpec extends Specification {
         code == new Code(value)
 
         where:
-        value << ["alpha", "foo_bar", "beta_100_gamma", "z_e_t_a_0_1_2"]
+        value << ["alpha", "foo_bar", "beta:100_gamma", "z_e_t_a_0_1_2"]
     }
 
 }

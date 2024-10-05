@@ -26,7 +26,7 @@ public class CodeConverter implements AttributeConverter<Code, String> {
 
     @Override
     public String convertToDatabaseColumn(Code attribute) {
-        return attribute.getValue();
+        return attribute == null ? null : attribute.getValue();
     }
 
     @Override
