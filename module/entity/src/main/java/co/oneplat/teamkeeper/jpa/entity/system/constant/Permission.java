@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.jpa.system.constant;
+package co.oneplat.teamkeeper.jpa.entity.system.constant;
 
 import org.springframework.http.HttpMethod;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+
+import co.oneplat.teamkeeper.common.object.Code;
 
 @Getter
 @ToString
-@RequiredArgsConstructor
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Permission {
 
     // User --------------------------------------------------------------------------------------------
@@ -42,10 +45,16 @@ public enum Permission {
 
     // -------------------------------------------------------------------------------------------------
 
-    private final String code;
+    Permission(String code, String name, HttpMethod apiMethod) {
+        this.code = new Code(code);
+        this.name = name;
+        this.apiMethod = apiMethod;
+    }
 
-    private final String description;
+    private final Code code;
 
-    private final HttpMethod httpMethod;
+    private final String name;
+
+    private final HttpMethod apiMethod;
 
 }

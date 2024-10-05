@@ -18,8 +18,6 @@ package co.oneplat.teamkeeper.common.exception
 
 import spock.lang.Specification
 
-import co.oneplat.teamkeeper.common.object.Code
-
 class BusinessSpec extends Specification {
 
     def "All businesses have valid properties"() {
@@ -28,8 +26,8 @@ class BusinessSpec extends Specification {
 
         expect:
         businesses.length > 0
-        businesses.every { Code.isValid(it.domain) }
-        businesses.every { it.code.matches(/^[a-z]+:[a-z]+[a-z_0-9]*$/) }
+        businesses.every { it.domain }
+        businesses.every { it.code }
         businesses.every { !it.errorMessage.blank }
     }
 

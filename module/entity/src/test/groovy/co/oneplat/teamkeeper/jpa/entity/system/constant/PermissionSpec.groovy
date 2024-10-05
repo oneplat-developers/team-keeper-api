@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.jpa.system.constant
+package co.oneplat.teamkeeper.jpa.entity.system.constant
 
 import spock.lang.Specification
 
 import org.springframework.http.HttpMethod
+
+import co.oneplat.teamkeeper.common.object.Code
 
 class PermissionSpec extends Specification {
 
@@ -28,10 +30,10 @@ class PermissionSpec extends Specification {
 
         expect:
         permissions.length > 0
-        permissions.every { it.code.matches(/^[a-z]+:[a-z]+[a-z_0-9]*$/) }
-        permissions.every { !it.description.blank }
+        permissions.every { Code.isValid(it.code.value, ':' as char) }
+        permissions.every { !it.name.blank }
         permissions.every {
-            [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE].contains(it.httpMethod)
+            [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE].contains(it.apiMethod)
         }
     }
 

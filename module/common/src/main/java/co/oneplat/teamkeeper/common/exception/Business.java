@@ -16,13 +16,16 @@
 
 package co.oneplat.teamkeeper.common.exception;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+
+import co.oneplat.teamkeeper.common.object.Code;
 
 @Getter
 @ToString
-@RequiredArgsConstructor
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Business {
 
     // Object ------------------------------------------------------------------------------------------
@@ -37,9 +40,15 @@ public enum Business {
 
     ;
 
-    private final String domain;
+    Business(String domain, String code, String errorMessage) {
+        this.domain = new Code(domain);
+        this.code = new Code(code);
+        this.errorMessage = errorMessage;
+    }
 
-    private final String code;
+    private final Code domain;
+
+    private final Code code;
 
     private final String errorMessage;
 

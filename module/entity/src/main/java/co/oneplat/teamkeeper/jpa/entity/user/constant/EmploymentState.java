@@ -16,11 +16,16 @@
 
 package co.oneplat.teamkeeper.jpa.entity.user.constant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+import co.oneplat.teamkeeper.common.object.Code;
 
 @Getter
-@RequiredArgsConstructor
+@ToString
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum EmploymentState {
 
     ACTIVE("active", "재직중"),
@@ -30,7 +35,12 @@ public enum EmploymentState {
 
     // -------------------------------------------------------------------------------------------------
 
-    private final String code;
+    EmploymentState(String code, String name) {
+        this.code = new Code(code);
+        this.name = name;
+    }
+
+    private final Code code;
 
     private final String name;
 
