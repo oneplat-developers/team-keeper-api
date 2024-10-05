@@ -27,7 +27,7 @@ public enum Business {
 
     // Object ------------------------------------------------------------------------------------------
 
-    PARSE_CODE_OBJECT("common", "parse:code_object", "올바른 형식의 코드가 아닙니다."),
+    PARSE_CODE_OBJECT("common", "parse:code_object", "코드를 분석하는 데에 실패했습니다."),
 
     // Common Group Code -------------------------------------------------------------------------------
 
