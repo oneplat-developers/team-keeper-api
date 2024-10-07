@@ -29,11 +29,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import co.oneplat.teamkeeper.common.exception.Business;
 import co.oneplat.teamkeeper.common.exception.BusinessException;
 
 @Getter
+@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class Code {
 
