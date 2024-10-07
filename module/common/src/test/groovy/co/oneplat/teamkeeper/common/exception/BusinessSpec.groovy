@@ -18,17 +18,49 @@ package co.oneplat.teamkeeper.common.exception
 
 import spock.lang.Specification
 
+import com.fasterxml.jackson.databind.json.JsonMapper
+
 class BusinessSpec extends Specification {
 
-    def "All businesses have valid properties"() {
-        given:
+    def "Validates integrity of all businesses"() {
+        when:
         def businesses = Business.values()
 
-        expect:
+        then: "Businesses must be defined at least one"
         businesses.length > 0
-        businesses.every { it.domain }
+
+        then: "All businesses have valid properties"
+        businesses.length > 0
         businesses.every { it.code }
+        businesses.every { it.domain }
         businesses.every { !it.errorMessage.blank }
+
+        then: "There is no duplicated business"
+        businesses.collect { it.code }.toSet().size() == businesses.size()
+    }
+
+    def "Converts to JSON as object which has its properties"() {
+        given:
+        def jsonMapper = JsonMapper.builder().build()
+
+        when:
+        def json = jsonMapper.writeValueAsString(business)
+
+        then:
+        def expected = """
+        {
+            "code": #{code},
+            "domain": #{domain},
+            "errorMessage": #{errorMessage}
+        }
+        """.replaceAll(~/\s/, '').replaceAll(~/#\{(\w+)}/) { fullMatch, key ->
+            def property = business[key as String]
+            property ? jsonMapper.writeValueAsString(property) : fullMatch
+        }
+        json == expected
+
+        where:
+        business << List.of(Business.values())
     }
 
 }

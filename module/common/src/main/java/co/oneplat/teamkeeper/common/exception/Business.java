@@ -30,25 +30,25 @@ public enum Business {
 
     // Object ------------------------------------------------------------------------------------------
 
-    PARSE_CODE_OBJECT("common", "parse:code_object", "코드를 분석하는 데에 실패했습니다."),
+    PARSE_CODE_OBJECT("parse:code_object", "common", "코드를 분석하는 데에 실패했습니다."),
 
     // Common Group Code -------------------------------------------------------------------------------
 
-    CREATE_COMMON_GROUP_CODE("common_group_code", "create:common_group_code", "공통 그룹 코드를 생성하는 데에 실패했습니다."),
+    CREATE_COMMON_GROUP_CODE("create:common_group_code", "common_group_code", "공통 그룹 코드를 생성하는 데에 실패했습니다."),
 
     // -------------------------------------------------------------------------------------------------
 
     ;
 
-    Business(String domain, String code, String errorMessage) {
-        this.domain = new Code(domain);
+    Business(String code, String domain, String errorMessage) {
         this.code = new Code(code);
+        this.domain = new Code(domain);
         this.errorMessage = errorMessage;
     }
 
-    private final Code domain;
-
     private final Code code;
+
+    private final Code domain;
 
     private final String errorMessage;
 
