@@ -9,7 +9,9 @@ name: java-ci-with-gradle
 
 on:
   push:
-    branches: [ 'master' ]
+    branches:
+      - master
+      - develop
     paths:
       - build.gradle
       - settings.gradle
@@ -18,7 +20,9 @@ on:
       - module/*/*-build.gradle
       - module/*/gradle.properties
   pull_request:
-    branches: [ 'master' ]
+    branches:
+      - master
+      - develop
     paths:
       - build.gradle
       - settings.gradle
