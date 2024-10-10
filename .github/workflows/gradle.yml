@@ -16,7 +16,7 @@ on:
       - build.gradle
       - settings.gradle
       - lombok.config
-      - module/*/src/
+      - module/*/src/**
       - module/*/*-build.gradle
       - module/*/gradle.properties
   pull_request:
@@ -27,7 +27,7 @@ on:
       - build.gradle
       - settings.gradle
       - lombok.config
-      - module/*/src/
+      - module/*/src/**
       - module/*/*-build.gradle
       - module/*/gradle.properties
 
