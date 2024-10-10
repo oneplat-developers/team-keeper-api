@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.common.exception
+package co.oneplat.teamkeeper.jpa.entity.user.constant
 
 import spock.lang.Specification
 
@@ -22,23 +22,22 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 
 import co.oneplat.teamkeeper.common.object.Code
 
-class BusinessSpec extends Specification {
+class EmploymentStateSpec extends Specification {
 
-    def "Validates integrity of all businesses"() {
+    def "Validates integrity of all employment states"() {
         when:
-        def businesses = Business.values()
+        def states = EmploymentState.values()
 
-        then: "Business must be defined at least one"
-        businesses.length > 0
+        then: "Employment state must be defined at least one"
+        states.length > 0
 
-        then: "All businesses have valid properties"
-        businesses.length > 0
-        businesses.every { it.code }
-        businesses.every { it.domain }
-        businesses.every { !it.errorMessage.blank }
+        then: "All employment states have valid properties"
+        states.length > 0
+        states.every { it.code }
+        states.every { !it.name.blank }
 
-        then: "There is no duplicated business"
-        businesses.collect { it.code }.toSet().size() == businesses.size()
+        then: "There is no duplicated employment state"
+        states.collect { it.code }.toSet().size() == states.size()
     }
 
     def "Converts to JSON as object which has its properties"() {
@@ -46,41 +45,42 @@ class BusinessSpec extends Specification {
         def jsonMapper = JsonMapper.builder().build()
 
         when:
-        def json = jsonMapper.writeValueAsString(business)
+        def json = jsonMapper.writeValueAsString(state)
 
         then:
         def expected = """
         {
             "code": #{code},
-            "domain": #{domain},
-            "errorMessage": #{errorMessage}
+            "name": #{name}
         }
         """.replaceAll(~/\s/, '').replaceAll(~/#\{(\w+)}/) { fullMatch, key ->
-            def property = business[key as String]
+            def property = state[key as String]
             property ? jsonMapper.writeValueAsString(property) : fullMatch
         }
         json == expected
 
         where:
-        business << List.of(Business.values())
+        state << List.of(EmploymentState.values())
     }
 
-    def "Returns the business matched by code"() {
+    def "Returns the employment state matched by code"() {
         given:
         def code = new Code(codeValue)
 
         when:
-        def business = Business.of(code).orElse(null)
+        def state = EmploymentState.of(code).orElse(null)
 
         then:
-        business == expected
+        state == expected
 
         where:
-        codeValue                  | expected
-        "parse_code_object"        | null
-        "common_group_code"        | null
-        "parse:code_object"        | Business.PARSE_CODE_OBJECT
-        "create:common_group_code" | Business.CREATE_COMMON_GROUP_CODE
+        codeValue      | expected
+        "leave"        | null
+        "state:active" | null
+        "active"       | EmploymentState.ACTIVE
+        "on_leave"     | EmploymentState.ON_LEAVE
+        "suspended"    | EmploymentState.SUSPENDED
+        "resigned"     | EmploymentState.RESIGNED
     }
 
 }

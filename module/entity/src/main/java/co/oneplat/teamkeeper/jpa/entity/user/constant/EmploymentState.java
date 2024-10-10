@@ -16,6 +16,9 @@
 
 package co.oneplat.teamkeeper.jpa.entity.user.constant;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
@@ -43,5 +46,9 @@ public enum EmploymentState {
     private final Code code;
 
     private final String name;
+
+    public static Optional<EmploymentState> of(Code code) {
+        return Stream.of(values()).filter(it -> it.code.equals(code)).findFirst();
+    }
 
 }

@@ -16,6 +16,11 @@
 
 package co.oneplat.teamkeeper.common.exception;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import jakarta.annotation.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
@@ -51,5 +56,9 @@ public enum Business {
     private final Code domain;
 
     private final String errorMessage;
+
+    public static Optional<Business> of(@Nullable Code code) {
+        return Stream.of(values()).filter(it -> it.code.equals(code)).findFirst();
+    }
 
 }
