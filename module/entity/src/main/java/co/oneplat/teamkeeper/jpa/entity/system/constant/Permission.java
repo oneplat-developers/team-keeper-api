@@ -16,6 +16,9 @@
 
 package co.oneplat.teamkeeper.jpa.entity.system.constant;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.springframework.http.HttpMethod;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -56,5 +59,9 @@ public enum Permission {
     private final String name;
 
     private final HttpMethod apiMethod;
+
+    public static Optional<Permission> of(Code code) {
+        return Stream.of(values()).filter(it -> it.code.equals(code)).findFirst();
+    }
 
 }
