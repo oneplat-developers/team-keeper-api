@@ -84,8 +84,7 @@ public class User extends AbstractUsableEntity {
     /**
      * 고용 상태
      */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "EMP_STAT", nullable = false)
+    @Convert(converter = CodeLikeConverter.class)
     @Column(name = "EMP_STATE", nullable = false)
     private EmploymentState employmentState;
 
