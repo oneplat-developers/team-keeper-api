@@ -19,6 +19,8 @@ package co.oneplat.teamkeeper.jpa.entity.user.approval.constant;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
@@ -48,7 +50,7 @@ public enum UserApprovalState implements CodeLike {
 
     private final String name;
 
-    public static Optional<UserApprovalState> of(Code code) {
+    public static Optional<UserApprovalState> of(@Nullable Code code) {
         return Stream.of(values()).filter(it -> it.code.equals(code)).findFirst();
     }
 

@@ -21,8 +21,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jakarta.annotation.Nullable;
-
+import org.jetbrains.annotations.Nullable;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonValue;
