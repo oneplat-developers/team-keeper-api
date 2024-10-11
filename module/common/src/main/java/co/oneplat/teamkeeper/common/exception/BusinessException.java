@@ -16,25 +16,27 @@
 
 package co.oneplat.teamkeeper.common.exception;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import lombok.Getter;
-import lombok.NonNull;
 
 @Getter
 public class BusinessException extends RuntimeException {
 
     private final Business business;
 
-    public BusinessException(@NonNull Business business) {
+    public BusinessException(@NotNull Business business) {
         this(business, business.getErrorMessage());
     }
 
-    public BusinessException(@NonNull Business business, @NonNull String detailMessage) {
-        super(detailMessage);
+    public BusinessException(@NotNull Business business, @Nullable String message) {
+        super(message);
         this.business = business;
     }
 
-    public BusinessException(@NonNull Business business, @NonNull String detailMessage, Throwable cause) {
-        super(detailMessage, cause);
+    public BusinessException(@NotNull Business business, @Nullable String message, @Nullable Throwable cause) {
+        super(message, cause);
         this.business = business;
     }
 
