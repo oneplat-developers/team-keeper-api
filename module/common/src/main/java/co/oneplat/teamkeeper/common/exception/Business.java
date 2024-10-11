@@ -27,11 +27,12 @@ import lombok.Getter;
 import lombok.ToString;
 
 import co.oneplat.teamkeeper.common.object.Code;
+import co.oneplat.teamkeeper.common.object.CodeLike;
 
 @Getter
 @ToString
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum Business {
+public enum Business implements CodeLike {
 
     // Object ------------------------------------------------------------------------------------------
 

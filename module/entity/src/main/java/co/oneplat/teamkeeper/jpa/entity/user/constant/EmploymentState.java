@@ -25,11 +25,12 @@ import lombok.Getter;
 import lombok.ToString;
 
 import co.oneplat.teamkeeper.common.object.Code;
+import co.oneplat.teamkeeper.common.object.CodeLike;
 
 @Getter
 @ToString
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum EmploymentState {
+public enum EmploymentState implements CodeLike {
 
     ACTIVE("active", "재직중"),
     ON_LEAVE("on_leave", "휴직중"),
