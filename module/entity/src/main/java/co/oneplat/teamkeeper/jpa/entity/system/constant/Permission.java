@@ -19,7 +19,7 @@ package co.oneplat.teamkeeper.jpa.entity.system.constant;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.http.HttpMethod;
+import org.jetbrains.annotations.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -36,32 +36,29 @@ public enum Permission implements CodeLike {
 
     // User --------------------------------------------------------------------------------------------
 
-    APPROVE_USER_JOIN("approve:user_join", "회원가입 승인", HttpMethod.PUT),
+    APPROVE_USER_JOIN("approve:user_join", "회원가입 승인"),
 
     // Attendance --------------------------------------------------------------------------------------
 
-    MODIFY_MY_OLD_ATTENDANCE("modify:my_old_attendance", "자신의 오래된 근태현황 수정", HttpMethod.PUT),
-    CREATE_OTHER_ATTENDANCE("create:other_attendance", "다른 사용자의 근태현황 등록", HttpMethod.POST),
-    MODIFY_OTHER_ATTENDANCE("modify:other_attendance", "다른 사용자의 근태현황 수정", HttpMethod.PUT),
-    REMOVE_OTHER_ATTENDANCE("remove:other_attendance", "다른 사용자의 근태현황 삭제", HttpMethod.DELETE),
+    MODIFY_MY_OLD_ATTENDANCE("modify:my_old_attendance", "자신의 오래된 근태현황 수정"),
+    CREATE_OTHER_ATTENDANCE("create:other_attendance", "다른 사용자의 근태현황 등록"),
+    MODIFY_OTHER_ATTENDANCE("modify:other_attendance", "다른 사용자의 근태현황 수정"),
+    REMOVE_OTHER_ATTENDANCE("remove:other_attendance", "다른 사용자의 근태현황 삭제"),
 
     ;
 
     // -------------------------------------------------------------------------------------------------
 
-    Permission(String code, String name, HttpMethod apiMethod) {
+    Permission(String code, String name) {
         this.code = new Code(code);
         this.name = name;
-        this.apiMethod = apiMethod;
     }
 
     private final Code code;
 
     private final String name;
 
-    private final HttpMethod apiMethod;
-
-    public static Optional<Permission> of(Code code) {
+    public static Optional<Permission> of(@Nullable Code code) {
         return Stream.of(values()).filter(it -> it.code.equals(code)).findFirst();
     }
 

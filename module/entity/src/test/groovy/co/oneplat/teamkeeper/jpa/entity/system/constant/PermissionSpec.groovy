@@ -18,23 +18,47 @@ package co.oneplat.teamkeeper.jpa.entity.system.constant
 
 import spock.lang.Specification
 
-import org.springframework.http.HttpMethod
-
-import co.oneplat.teamkeeper.common.object.Code
+import com.fasterxml.jackson.databind.json.JsonMapper
 
 class PermissionSpec extends Specification {
 
-    def "All permissions have valid properties"() {
-        given:
+    def "Validates integrity of all permissions"() {
+        when:
         def permissions = Permission.values()
 
-        expect:
+        then: "Permission must be defined at least one"
         permissions.length > 0
-        permissions.every { Code.isValid(it.code.value, ':' as char) }
+
+        then: "All permissions have valid properties"
+        permissions.length > 0
+        permissions.every { it.code }
         permissions.every { !it.name.blank }
-        permissions.every {
-            [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE].contains(it.apiMethod)
+
+        then: "There is no duplicated permission"
+        permissions.collect { it.code }.toSet().size() == permissions.size()
+    }
+
+    def "Converts to JSON as object which has its properties"() {
+        given:
+        def jsonMapper = JsonMapper.builder().build()
+
+        when:
+        def json = jsonMapper.writeValueAsString(permission)
+
+        then:
+        def expected = """
+        {
+            "code": #{code},
+            "name": #{name}
         }
+        """.replaceAll(~/\s/, '').replaceAll(~/#\{(\w+)}/) { fullMatch, key ->
+            def property = permission[key as String]
+            property ? jsonMapper.writeValueAsString(property) : fullMatch
+        }
+        json == expected
+
+        where:
+        permission << List.of(Permission.values())
     }
 
 }
