@@ -1,0 +1,55 @@
+/*
+ * Copyright 2024 OnePlat
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package co.oneplat.teamkeeper.jpa.entity.user.approval.constant;
+
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Getter;
+import lombok.ToString;
+
+import co.oneplat.teamkeeper.common.object.Code;
+import co.oneplat.teamkeeper.common.object.CodeLike;
+
+@Getter
+@ToString
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum UserApprovalState implements CodeLike {
+
+    UNAUTHENTICATED("unauthenticated", "미인증"),
+    AUTHENTICATED("authenticated", "인증 완료"),
+    ADMINISTRATOR_APPROVED("admin_approved", "관리자 승인"),
+    ADMINISTRATOR_REJECTED("admin_rejected", "관리자 반려");
+
+    // -------------------------------------------------------------------------------------------------
+
+    UserApprovalState(String code, String name) {
+        this.code = new Code(code);
+        this.name = name;
+    }
+
+    private final Code code;
+
+    private final String name;
+
+    public static Optional<UserApprovalState> of(Code code) {
+        return Stream.of(values()).filter(it -> it.code.equals(code)).findFirst();
+    }
+
+}
