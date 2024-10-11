@@ -1,0 +1,49 @@
+spring:
+  # H2 Database --------------------------------------------------------------------------------------
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:~/test;DB_CLOSE_DELAY=-1;MODE=MariaDB;DATABASE_TO_LOWER=FALSE;CASE_INSENSITIVE_IDENTIFIERS=FALSE;
+      username: sa
+      connection-init-sql: SELECT 1
+  h2:
+    console:
+      enabled: false
+  # JPA ----------------------------------------------------------------------------------------------
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: true
+        globally_quoted_identifiers: true
+        #        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.MariaDBDialect
+    defer-datasource-initialization: true
+  # Initializing data --------------------------------------------------------------------------------
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+      continue-on-error: false
+      schema-locations:
+#        - classpath:/database/schema/cm-grp-code.sql
+#        - classpath:/database/schema/cm-code.sql
+#        - classpath:/database/schema/base-mtrl.sql
+#        - classpath:/database/schema/base-mtrl-value.sql
+#        - classpath:/database/schema/cpn.sql
+#        - classpath:/database/schema/cpn-locplc.sql
+#        - classpath:/database/schema/ntrigd.sql
+#        - classpath:/database/schema/rawmtrl.sql
+#        - classpath:/database/schema/mta-atrb.sql
+#        - classpath:/database/schema/mta-atrb-value.sql
+#        - classpath:/database/schema/kan-cls.sql
+#        - classpath:/database/schema/cls-atrb.sql
+#        - classpath:/database/schema/prd.sql
+#        - classpath:/database/schema/prd-base-info-itm.sql
+#        - classpath:/database/schema/prd-img.sql
+#        - classpath:/database/schema/prd-atrb.sql
