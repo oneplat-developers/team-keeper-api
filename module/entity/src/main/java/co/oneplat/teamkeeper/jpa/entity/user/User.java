@@ -19,9 +19,8 @@ package co.oneplat.teamkeeper.jpa.entity.user;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -32,7 +31,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import co.oneplat.teamkeeper.jpa.entity.base.AbstractDeletableEntity;
+import co.oneplat.teamkeeper.jpa.converter.CodeLikeConverter;
+import co.oneplat.teamkeeper.jpa.entity.base.AbstractUsableEntity;
 import co.oneplat.teamkeeper.jpa.entity.user.constant.EmploymentState;
 
 /**
@@ -42,7 +42,7 @@ import co.oneplat.teamkeeper.jpa.entity.user.constant.EmploymentState;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "USER")
-public class User extends AbstractDeletableEntity {
+public class User extends AbstractUsableEntity {
 
     /**
      * 사용자 아이디
@@ -86,6 +86,7 @@ public class User extends AbstractDeletableEntity {
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "EMP_STAT", nullable = false)
+    @Column(name = "EMP_STATE", nullable = false)
     private EmploymentState employmentState;
 
     // -------------------------------------------------------------------------------------------------
@@ -146,6 +147,9 @@ public class User extends AbstractDeletableEntity {
 
         this.resignedDate = resignedDate;
         this.employmentState = EmploymentState.RESIGNED;
+
+        // 퇴사한 사용자를 비활성화한다.
+        setUsed(false);
     }
 
 }

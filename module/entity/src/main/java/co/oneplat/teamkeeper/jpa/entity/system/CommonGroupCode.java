@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import co.oneplat.teamkeeper.common.exception.Business;
 import co.oneplat.teamkeeper.common.exception.BusinessException;
 import co.oneplat.teamkeeper.common.object.Code;
-import co.oneplat.teamkeeper.jpa.converter.CodeConverter;
+import co.oneplat.teamkeeper.jpa.converter.CodeLikeConverter;
 import co.oneplat.teamkeeper.jpa.entity.base.AbstractAuditableEntity;
 
 /**
@@ -48,7 +48,7 @@ public class CommonGroupCode extends AbstractAuditableEntity {
      * 그룹코드
      */
     @Id
-    @Convert(converter = CodeConverter.class)
+    @Convert(converter = CodeLikeConverter.class)
     @Column(name = "GROUP_ID", nullable = false, updatable = false)
     private Code id;
 
