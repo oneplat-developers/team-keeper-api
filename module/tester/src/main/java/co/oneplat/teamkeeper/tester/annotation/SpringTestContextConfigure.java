@@ -23,6 +23,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestConstructor;
@@ -45,6 +47,7 @@ import org.springframework.test.context.TestPropertySource;
 @Documented
 @Inherited
 @TestPropertySource(properties = "spring.profiles.active=test")
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public @interface SpringTestContextConfigure {
 }
