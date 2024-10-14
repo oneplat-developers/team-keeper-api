@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: attendance
+  config:
+    activate:
+      on-profile: local
+  # H2 Database --------------------------------------------------------------------------------------
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:~/test;DB_CLOSE_DELAY=-1;MODE=MariaDB;DATABASE_TO_LOWER=FALSE;CASE_INSENSITIVE_IDENTIFIERS=FALSE;
+      username: sa
+      connection-init-sql: SELECT 1
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  # JPA ----------------------------------------------------------------------------------------------
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        generate_statistics: false
+        globally_quoted_identifiers: true
+    defer-datasource-initialization: true
+# P6Spy --------------------------------------------------------------------------------------------
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+server:
+  port: 8100
+  servlet:
+    context-path: /api
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+logging:
+  charset:
+    console: UTF-8
+  level:
+    root: info
+    sql: debug
+    p6spy: info
+    co.oneplat.teamkeeper: debug
