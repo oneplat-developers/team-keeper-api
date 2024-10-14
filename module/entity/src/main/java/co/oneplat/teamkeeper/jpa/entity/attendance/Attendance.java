@@ -24,12 +24,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,7 +40,10 @@ import co.oneplat.teamkeeper.jpa.entity.user.User;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "ATTENDANCE", uniqueConstraints = @UniqueConstraint(columnNames = {"user", "date"}))
+@Table(
+        name = "ATTENDANCE",
+        indexes = @Index(columnList = "ATTEND_DATE DESC, USER_ID, ATTEND_ID DESC")
+)
 public class Attendance extends AbstractDeletableEntity {
 
     @Id
@@ -47,17 +51,38 @@ public class Attendance extends AbstractDeletableEntity {
     @Column(name = "ATTEND_ID")
     private Long id;
 
+    /**
+     * 사용자
+     */
     @ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = false, updatable = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false, updatable = false)
     private User user;
 
+    /**
+     * 근무일자
+     */
     @Column(name = "ATTEND_DATE", nullable = false, updatable = false)
     private LocalDate date;
 
+    /**
+     * 출근시간
+     */
     @Column(name = "ATTEND_START_TIME")
     private LocalTime startTime;
 
+    /**
+     * 퇴근시간
+     */
     @Column(name = "ATTEND_END_TIME")
     private LocalTime endTime;
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Builder
+    @SuppressWarnings("unused")
+    Attendance(User user, LocalDate date) {
+        this.user = user;
+        this.date = date;
+    }
 
 }
