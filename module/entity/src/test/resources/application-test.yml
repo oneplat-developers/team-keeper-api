@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: test
   # H2 Database --------------------------------------------------------------------------------------
   datasource:
     hikari:
@@ -21,16 +24,14 @@ spring:
       hibernate:
         format_sql: true
         globally_quoted_identifiers: true
-        #        dialect: org.hibernate.dialect.MySQLDialect
-        dialect: org.hibernate.dialect.MariaDBDialect
     defer-datasource-initialization: true
   # Initializing data --------------------------------------------------------------------------------
-  sql:
-    init:
-      mode: always
-      encoding: UTF-8
-      continue-on-error: false
-      schema-locations:
+#  sql:
+#    init:
+#      mode: always
+#      encoding: UTF-8
+#      continue-on-error: false
+#      schema-locations:
 #        - classpath:/database/schema/cm-grp-code.sql
 #        - classpath:/database/schema/cm-code.sql
 #        - classpath:/database/schema/base-mtrl.sql

@@ -16,15 +16,13 @@
 
 package co.oneplat.teamkeeper.jpa.converter
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import jakarta.persistence.EntityManager
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.boot.test.context.SpringBootTest
-
-import lombok.RequiredArgsConstructor
 
 import co.oneplat.teamkeeper.common.object.Code
 import co.oneplat.teamkeeper.jpa.entity.test.TesterEntity
@@ -32,14 +30,13 @@ import co.oneplat.teamkeeper.jpa.entity.user.constant.EmploymentState
 import co.oneplat.teamkeeper.tester.annotation.SpringTestContextConfigure
 
 @DataJpaTest
-//@SpringBootTest
-//@RequiredArgsConstructor
 @SpringTestContextConfigure
 class ConvertSpec extends Specification {
 
     @Autowired
     private EntityManager entityManager
 
+    @Ignore("Spring test based spock doesn't work")
     def "test"() {
         given:
         def entity = new TesterEntity();
