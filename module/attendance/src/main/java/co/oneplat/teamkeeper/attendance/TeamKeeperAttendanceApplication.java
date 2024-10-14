@@ -18,8 +18,10 @@ package co.oneplat.teamkeeper.attendance;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@SpringBootApplication
+@EnableJpaAuditing
+@SpringBootApplication(scanBasePackages = "co.oneplat.teamkeeper")
 public class TeamKeeperAttendanceApplication {
 
     public static void main(String[] args) {
