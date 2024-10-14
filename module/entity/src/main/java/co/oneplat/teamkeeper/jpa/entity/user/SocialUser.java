@@ -52,7 +52,7 @@ public class SocialUser extends AbstractUsableEntity {
      * 사용자
      */
     @OneToOne
-    @JoinColumn(name = "USER_ID", unique = true, insertable = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", unique = true)
     private User user;
 
     // -------------------------------------------------------------------------------------------------

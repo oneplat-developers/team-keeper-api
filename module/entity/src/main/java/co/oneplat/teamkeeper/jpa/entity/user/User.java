@@ -31,7 +31,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import co.oneplat.teamkeeper.jpa.converter.CodeLikeConverter;
+import co.oneplat.teamkeeper.jpa.converter.EmploymentStateConverter;
 import co.oneplat.teamkeeper.jpa.entity.base.AbstractUsableEntity;
 import co.oneplat.teamkeeper.jpa.entity.user.constant.EmploymentState;
 
@@ -84,7 +84,7 @@ public class User extends AbstractUsableEntity {
     /**
      * 고용 상태
      */
-    @Convert(converter = CodeLikeConverter.class)
+    @Convert(converter = EmploymentStateConverter.class)
     @Column(name = "EMP_STATE", nullable = false)
     private EmploymentState employmentState;
 

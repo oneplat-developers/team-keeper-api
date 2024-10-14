@@ -29,7 +29,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import co.oneplat.teamkeeper.jpa.converter.CodeLikeConverter;
+import co.oneplat.teamkeeper.jpa.converter.UserApprovalStateConverter;
 import co.oneplat.teamkeeper.jpa.entity.base.AbstractAuditableEntity;
 import co.oneplat.teamkeeper.jpa.entity.user.User;
 import co.oneplat.teamkeeper.jpa.entity.user.approval.constant.UserApprovalState;
@@ -48,13 +48,13 @@ public class UserApproval extends AbstractAuditableEntity {
      */
     @Id
     @OneToOne(optional = false)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
     private User user;
 
     /**
      * 승인 상태
      */
-    @Convert(converter = CodeLikeConverter.class)
+    @Convert(converter = UserApprovalStateConverter.class)
     @Column(name = "APPROVE_STATE", nullable = false)
     private UserApprovalState state;
 
