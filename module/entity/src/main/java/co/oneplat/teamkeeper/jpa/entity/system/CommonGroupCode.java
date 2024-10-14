@@ -22,6 +22,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.util.StringUtils;
 
 import lombok.AccessLevel;
@@ -32,7 +34,7 @@ import lombok.NoArgsConstructor;
 import co.oneplat.teamkeeper.common.exception.Business;
 import co.oneplat.teamkeeper.common.exception.BusinessException;
 import co.oneplat.teamkeeper.common.object.Code;
-import co.oneplat.teamkeeper.jpa.converter.CodeLikeConverter;
+import co.oneplat.teamkeeper.jpa.converter.CodeConverter;
 import co.oneplat.teamkeeper.jpa.entity.base.AbstractAuditableEntity;
 
 /**
@@ -48,7 +50,8 @@ public class CommonGroupCode extends AbstractAuditableEntity {
      * 그룹코드
      */
     @Id
-    @Convert(converter = CodeLikeConverter.class)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Convert(converter = CodeConverter.class)
     @Column(name = "GROUP_ID", nullable = false, updatable = false)
     private Code id;
 
