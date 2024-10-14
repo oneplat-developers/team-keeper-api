@@ -6,12 +6,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'com.okta.spring:okta-spring-boot-starter:3.0.7'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
