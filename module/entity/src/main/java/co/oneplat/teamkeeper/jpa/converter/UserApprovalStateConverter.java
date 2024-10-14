@@ -16,23 +16,21 @@
 
 package co.oneplat.teamkeeper.jpa.converter;
 
-import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import co.oneplat.teamkeeper.common.object.Code;
-import co.oneplat.teamkeeper.common.object.CodeLike;
+import co.oneplat.teamkeeper.jpa.entity.user.approval.constant.UserApprovalState;
 
-@Converter(autoApply = true)
-public class CodeLikeConverter implements AttributeConverter<CodeLike, String> {
+@Converter
+public class UserApprovalStateConverter extends AbstractCodeLikeConverterSupport<UserApprovalState> {
 
+    @Nullable
     @Override
-    public String convertToDatabaseColumn(CodeLike attribute) {
-        return attribute == null ? null : attribute.getCode().getValue();
-    }
-
-    @Override
-    public CodeLike convertToEntityAttribute(String dbData) {
-        return dbData == null ? null : new Code(dbData);
+    protected UserApprovalState convertCodeLikeToEntityAttribute(@NotNull Code code) {
+        return UserApprovalState.of(code).orElse(null);
     }
 
 }

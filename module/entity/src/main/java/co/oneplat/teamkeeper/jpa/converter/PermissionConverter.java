@@ -18,22 +18,19 @@ package co.oneplat.teamkeeper.jpa.converter;
 
 import jakarta.persistence.Converter;
 
-import org.hibernate.type.descriptor.java.AbstractClassJavaType;
-import org.hibernate.usertype.UserTypeSupport;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import co.oneplat.teamkeeper.common.object.Code;
+import co.oneplat.teamkeeper.jpa.entity.system.constant.Permission;
 
-/**
- * @see UserTypeSupport
- * @see AbstractClassJavaType
- */
 @Converter
-public class CodeConverter extends AbstractCodeLikeConverterSupport<Code> {
+public class PermissionConverter extends AbstractCodeLikeConverterSupport<Permission> {
 
+    @Nullable
     @Override
-    protected Code convertCodeLikeToEntityAttribute(@NotNull Code code) {
-        return code;
+    protected Permission convertCodeLikeToEntityAttribute(@NotNull Code code) {
+        return Permission.of(code).orElse(null);
     }
 
 }

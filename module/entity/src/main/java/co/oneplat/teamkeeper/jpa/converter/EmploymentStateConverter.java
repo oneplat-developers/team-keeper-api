@@ -18,22 +18,19 @@ package co.oneplat.teamkeeper.jpa.converter;
 
 import jakarta.persistence.Converter;
 
-import org.hibernate.type.descriptor.java.AbstractClassJavaType;
-import org.hibernate.usertype.UserTypeSupport;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import co.oneplat.teamkeeper.common.object.Code;
+import co.oneplat.teamkeeper.jpa.entity.user.constant.EmploymentState;
 
-/**
- * @see UserTypeSupport
- * @see AbstractClassJavaType
- */
 @Converter
-public class CodeConverter extends AbstractCodeLikeConverterSupport<Code> {
+public class EmploymentStateConverter extends AbstractCodeLikeConverterSupport<EmploymentState> {
 
+    @Nullable
     @Override
-    protected Code convertCodeLikeToEntityAttribute(@NotNull Code code) {
-        return code;
+    protected EmploymentState convertCodeLikeToEntityAttribute(@NotNull Code code) {
+        return EmploymentState.of(code).orElse(null);
     }
 
 }
