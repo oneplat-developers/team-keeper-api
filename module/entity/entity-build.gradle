@@ -8,4 +8,5 @@ dependencies {
 
     testImplementation project(':tester')
     testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'com.h2database:h2'
 }

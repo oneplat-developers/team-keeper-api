@@ -48,6 +48,7 @@ configure(subprojects) {
             // Spockframework with groovy.
             dependency 'org.spockframework:spock-core:2.3-groovy-4.0'
             dependency 'org.spockframework:spock-spring:2.3-groovy-4.0'
+            dependency 'net.bytebuddy:byte-buddy:1.15.4'
         }
     }
 
@@ -86,6 +87,7 @@ configure(subprojects) {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.spockframework:spock-core'
         testImplementation 'org.spockframework:spock-spring'
+        testImplementation 'net.bytebuddy:byte-buddy'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
