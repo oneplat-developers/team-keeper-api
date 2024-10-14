@@ -37,7 +37,7 @@ import org.springframework.test.context.TestPropertySource;
  * {@code @ActiveProfiles("test")}, but you cannot get the given value on the annotation for {@code spring.profiles.active}.
  * You will get the value through {@link Environment#getActiveProfiles()}, but not through {@link Environment#getProperty(String)}.
  * <p>
- * To make consistent test environment, uses {@code @TestPropertySource} instead of {@code @ActiveProfiles}.
+ * To make consistent test environment, this uses {@code @TestPropertySource} instead of {@code @ActiveProfiles}.
  *
  * @see ActiveProfiles
  * @see TestPropertySource
