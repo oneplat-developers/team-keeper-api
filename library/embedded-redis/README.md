@@ -6,10 +6,4 @@ The goal of this module is wrapper of the dependency and supports on Apple Silic
 
 ## Additional Modules
 
-### zeeSQL
-
-
-
-#### References
-
-- https://zeesql.com/
+- zeeSQL: https://zeesql.com/
