@@ -16,6 +16,8 @@
 
 package co.oneplat.teamkeeper.common.configuration.redis.embedded;
 
+import java.util.List;
+
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -48,6 +50,7 @@ public class EmbeddedRedisAutoConfiguration {
         return EmbeddedRedisServer.builder()
                 .port(redisProperties.getPort())
                 .daemonize(false)
+                .saves(List.of())
                 .appendOnly(false)
                 .maxMemory(256)
                 .build();

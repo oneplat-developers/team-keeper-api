@@ -34,9 +34,11 @@ public class EmbeddedRedisServerBuilder {
 
     private String bind;
 
-    private int port = -1;
+    private Integer port;
 
     private boolean daemonize;
+
+    private List<String> saves;
 
     private boolean appendOnly;
 
@@ -63,6 +65,11 @@ public class EmbeddedRedisServerBuilder {
 
     public EmbeddedRedisServerBuilder daemonize(boolean daemonize) {
         this.daemonize = daemonize;
+        return this;
+    }
+
+    public EmbeddedRedisServerBuilder saves(List<String> saves) {
+        this.saves = saves;
         return this;
     }
 
@@ -102,7 +109,7 @@ public class EmbeddedRedisServerBuilder {
             bind("127.0.0.1");
         }
 
-        if (this.port == -1) {
+        if (this.port == null) {
             port(EmbeddedRedisServer.DEFAULT_PORT);
         }
 
@@ -119,9 +126,12 @@ public class EmbeddedRedisServerBuilder {
         args.addAll(List.of("--bind", this.bind));
         args.addAll(List.of("--port", String.valueOf(this.port)));
         args.addAll(List.of("--daemonize", this.daemonize ? "yes" : "no"));
+        if (this.saves != null) {
+            this.saves.forEach(it -> args.addAll(List.of("--save", it)));
+        }
         args.addAll(List.of("--appendonly", this.appendOnly ? "yes" : "no"));
         args.addAll(List.of("--maxmemory", this.maxMemory + "M"));
-        if (this.modulePaths != null && !this.modulePaths.isEmpty()) {
+        if (!this.modulePaths.isEmpty()) {
             args.addAll(List.of("--loadmodule", String.join(" ", this.modulePaths)));
         }
 
