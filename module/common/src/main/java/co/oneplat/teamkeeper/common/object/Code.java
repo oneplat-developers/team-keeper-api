@@ -21,8 +21,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jakarta.annotation.Nullable;
-
+import org.jetbrains.annotations.Nullable;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -37,7 +36,7 @@ import co.oneplat.teamkeeper.common.exception.BusinessException;
 @Getter
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public final class Code {
+public final class Code implements CodeLike {
 
     private static final Pattern FRAGMENT_PATTERN = Pattern.compile("[a-z0-9]+(?:_[a-z0-9]+)*");
 
@@ -91,6 +90,11 @@ public final class Code {
         }
 
         return value.length() == fragmentCount + totalFragmentsLength;
+    }
+
+    @Override
+    public Code getCode() {
+        return this;
     }
 
     public List<String> getFragments() {

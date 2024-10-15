@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.jpa.entity.system.constant;
+package co.oneplat.teamkeeper.jpa.entity.user.approval.constant;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -32,24 +32,16 @@ import co.oneplat.teamkeeper.common.object.CodeLike;
 @Getter
 @ToString
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum Permission implements CodeLike {
+public enum UserApprovalState implements CodeLike {
 
-    // User --------------------------------------------------------------------------------------------
-
-    APPROVE_USER_JOIN("approve:user_join", "회원가입 승인"),
-
-    // Attendance --------------------------------------------------------------------------------------
-
-    MODIFY_MY_OLD_ATTENDANCE("modify:my_old_attendance", "자신의 오래된 근태현황 수정"),
-    CREATE_OTHER_ATTENDANCE("create:other_attendance", "다른 사용자의 근태현황 등록"),
-    MODIFY_OTHER_ATTENDANCE("modify:other_attendance", "다른 사용자의 근태현황 수정"),
-    REMOVE_OTHER_ATTENDANCE("remove:other_attendance", "다른 사용자의 근태현황 삭제"),
-
-    ;
+    UNAUTHENTICATED("unauthenticated", "미인증"),
+    AUTHENTICATED("authenticated", "인증 완료"),
+    ADMINISTRATOR_APPROVED("admin_approved", "관리자 승인"),
+    ADMINISTRATOR_REJECTED("admin_rejected", "관리자 반려");
 
     // -------------------------------------------------------------------------------------------------
 
-    Permission(String code, String name) {
+    UserApprovalState(String code, String name) {
         this.code = new Code(code);
         this.name = name;
     }
@@ -58,7 +50,7 @@ public enum Permission implements CodeLike {
 
     private final String name;
 
-    public static Optional<Permission> of(@Nullable Code code) {
+    public static Optional<UserApprovalState> of(@Nullable Code code) {
         return Stream.of(values()).filter(it -> it.code.equals(code)).findFirst();
     }
 

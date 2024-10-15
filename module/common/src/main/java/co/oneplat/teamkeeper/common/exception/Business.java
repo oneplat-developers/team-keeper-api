@@ -19,7 +19,7 @@ package co.oneplat.teamkeeper.common.exception;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -27,11 +27,12 @@ import lombok.Getter;
 import lombok.ToString;
 
 import co.oneplat.teamkeeper.common.object.Code;
+import co.oneplat.teamkeeper.common.object.CodeLike;
 
 @Getter
 @ToString
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum Business {
+public enum Business implements CodeLike {
 
     // Object ------------------------------------------------------------------------------------------
 

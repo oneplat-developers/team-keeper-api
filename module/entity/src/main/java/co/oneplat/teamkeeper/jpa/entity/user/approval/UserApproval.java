@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.jpa.entity.attendance;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
+package co.oneplat.teamkeeper.jpa.entity.user.approval;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
@@ -34,55 +29,58 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import co.oneplat.teamkeeper.jpa.entity.base.AbstractDeletableEntity;
+import co.oneplat.teamkeeper.jpa.converter.UserApprovalStateConverter;
+import co.oneplat.teamkeeper.jpa.entity.base.AbstractAuditableEntity;
 import co.oneplat.teamkeeper.jpa.entity.user.User;
+import co.oneplat.teamkeeper.jpa.entity.user.approval.constant.UserApprovalState;
 
+/**
+ * 사용자 승인
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(
-        name = "ATTENDANCE",
-        indexes = @Index(columnList = "ATTEND_DATE DESC, USER_ID, ATTEND_ID DESC")
-)
-public class Attendance extends AbstractDeletableEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ATTEND_ID")
-    private Long id;
+@Table(name = "USER_APPROVAL")
+public class UserApproval extends AbstractAuditableEntity {
 
     /**
      * 사용자
      */
-    @ManyToOne
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false, updatable = false)
+    @Id
+    @OneToOne(optional = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
     private User user;
 
     /**
-     * 근무일자
+     * 승인 상태
      */
-    @Column(name = "ATTEND_DATE", nullable = false, updatable = false)
-    private LocalDate date;
-
-    /**
-     * 출근시간
-     */
-    @Column(name = "ATTEND_START_TIME")
-    private LocalTime startTime;
-
-    /**
-     * 퇴근시간
-     */
-    @Column(name = "ATTEND_END_TIME")
-    private LocalTime endTime;
+    @Convert(converter = UserApprovalStateConverter.class)
+    @Column(name = "APPROVE_STATE", nullable = false)
+    private UserApprovalState state;
 
     // -------------------------------------------------------------------------------------------------
 
     @Builder
     @SuppressWarnings("unused")
-    Attendance(User user, LocalDate date) {
+    UserApproval(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("UserApproval.user cannot be null");
+        }
+
         this.user = user;
-        this.date = date;
+        this.state = UserApprovalState.UNAUTHENTICATED;
+    }
+
+    public void authenticate() {
+        this.state = UserApprovalState.AUTHENTICATED;
+    }
+
+    public void approve() {
+        this.state = UserApprovalState.ADMINISTRATOR_APPROVED;
+    }
+
+    public void reject() {
+        this.state = UserApprovalState.ADMINISTRATOR_REJECTED;
     }
 
 }

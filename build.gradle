@@ -39,7 +39,16 @@ configure(subprojects) {
 
     dependencyManagement {
         dependencies {
+            // DataSource proxy for logging JPA parameters.
+            dependency 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2'
+
+            // Jetbrains annotation for compatibility with kotlin.
+            dependency 'org.jetbrains:annotations:26.0.0'
+
+            // Spockframework with groovy.
             dependency 'org.spockframework:spock-core:2.3-groovy-4.0'
+            dependency 'org.spockframework:spock-spring:2.3-groovy-4.0'
+            dependency 'net.bytebuddy:byte-buddy:1.15.4'
         }
     }
 
@@ -49,6 +58,8 @@ configure(subprojects) {
             exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
         }
         implementation 'org.springframework.boot:spring-boot-starter-undertow'
+
+        compileOnly 'org.jetbrains:annotations'
 
         // Lombok
         compileOnly 'org.projectlombok:lombok'
@@ -64,10 +75,19 @@ configure(subprojects) {
             annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
             annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
             annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+
+            // Uses h2 database on local environment.
+            runtimeOnly 'com.h2database:h2'
+            // Uses MariaDB database on AWS cloud environment.
+            runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+            testImplementation project(':tester')
         }
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.spockframework:spock-core'
+        testImplementation 'org.spockframework:spock-spring'
+        testImplementation 'net.bytebuddy:byte-buddy'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 

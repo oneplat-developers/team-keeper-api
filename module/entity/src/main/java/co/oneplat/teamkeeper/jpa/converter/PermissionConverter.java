@@ -14,30 +14,23 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.common.exception;
+package co.oneplat.teamkeeper.jpa.converter;
+
+import jakarta.persistence.Converter;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import lombok.Getter;
+import co.oneplat.teamkeeper.common.object.Code;
+import co.oneplat.teamkeeper.jpa.entity.system.constant.Permission;
 
-@Getter
-public class BusinessException extends RuntimeException {
+@Converter
+public class PermissionConverter extends AbstractCodeLikeConverterSupport<Permission> {
 
-    private final Business business;
-
-    public BusinessException(@NotNull Business business) {
-        this(business, business.getErrorMessage());
-    }
-
-    public BusinessException(@NotNull Business business, @Nullable String message) {
-        super(message);
-        this.business = business;
-    }
-
-    public BusinessException(@NotNull Business business, @Nullable String message, @Nullable Throwable cause) {
-        super(message, cause);
-        this.business = business;
+    @Nullable
+    @Override
+    protected Permission convertCodeLikeToEntityAttribute(@NotNull Code code) {
+        return Permission.of(code).orElse(null);
     }
 
 }

@@ -14,26 +14,10 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.jpa.converter;
+package co.oneplat.teamkeeper.common.object;
 
-import jakarta.persistence.Converter;
+public interface CodeLike {
 
-import org.hibernate.type.descriptor.java.AbstractClassJavaType;
-import org.hibernate.usertype.UserTypeSupport;
-import org.jetbrains.annotations.NotNull;
-
-import co.oneplat.teamkeeper.common.object.Code;
-
-/**
- * @see UserTypeSupport
- * @see AbstractClassJavaType
- */
-@Converter
-public class CodeConverter extends AbstractCodeLikeConverterSupport<Code> {
-
-    @Override
-    protected Code convertCodeLikeToEntityAttribute(@NotNull Code code) {
-        return code;
-    }
+    Code getCode();
 
 }

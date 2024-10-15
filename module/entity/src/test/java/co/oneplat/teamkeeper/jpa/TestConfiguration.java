@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-package co.oneplat.teamkeeper.jpa.converter;
+package co.oneplat.teamkeeper.jpa;
 
-import jakarta.persistence.Converter;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import org.hibernate.type.descriptor.java.AbstractClassJavaType;
-import org.hibernate.usertype.UserTypeSupport;
-import org.jetbrains.annotations.NotNull;
-
-import co.oneplat.teamkeeper.common.object.Code;
-
-/**
- * @see UserTypeSupport
- * @see AbstractClassJavaType
- */
-@Converter
-public class CodeConverter extends AbstractCodeLikeConverterSupport<Code> {
-
-    @Override
-    protected Code convertCodeLikeToEntityAttribute(@NotNull Code code) {
-        return code;
-    }
-
+@EnableJpaAuditing
+@EnableAutoConfiguration
+@SpringBootConfiguration
+class TestConfiguration {
 }

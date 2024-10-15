@@ -19,17 +19,20 @@ package co.oneplat.teamkeeper.jpa.entity.user.constant;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.ToString;
 
 import co.oneplat.teamkeeper.common.object.Code;
+import co.oneplat.teamkeeper.common.object.CodeLike;
 
 @Getter
 @ToString
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum EmploymentState {
+public enum EmploymentState implements CodeLike {
 
     ACTIVE("active", "재직중"),
     ON_LEAVE("on_leave", "휴직중"),
@@ -47,7 +50,7 @@ public enum EmploymentState {
 
     private final String name;
 
-    public static Optional<EmploymentState> of(Code code) {
+    public static Optional<EmploymentState> of(@Nullable Code code) {
         return Stream.of(values()).filter(it -> it.code.equals(code)).findFirst();
     }
 
