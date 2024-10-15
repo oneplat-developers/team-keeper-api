@@ -126,16 +126,18 @@ configure(subprojects) {
         useJUnitPlatform()
     }
 
+    final def simpleProjectName = project.name.substring(project.name.indexOf('.') + 1)
+
     // Enables subprojects to build plain jar file; It needed to refer to other modules on another module.
     // See https://github.com/HomoEfficio/dev-tips/blob/master/Gradle-error-package-does-not-exist.md
     jar {
         enabled = true
+        archiveFileName = "$rootProject.name-$simpleProjectName-${project.version}.plain.jar"
     }
 
     bootJar {
         enabled = isRunnableProject
-        archiveBaseName = "$rootProject.name-$project.name"
-        archiveVersion = "$project.version"
+        archiveFileName = "$rootProject.name-$simpleProjectName-${project.version}.jar"
     }
 }
 
