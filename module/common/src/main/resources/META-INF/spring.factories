@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  co.oneplat.teamkeeper.common.configuration.redis.embedded.EmbeddedRedisAutoConfiguration

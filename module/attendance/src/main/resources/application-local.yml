@@ -31,12 +31,21 @@ spring:
         generate_statistics: false
         globally_quoted_identifiers: true
     defer-datasource-initialization: true
+  # Redis --------------------------------------------------------------------------------------------
+  cache:
+    type: redis
+  data:
+    redis:
+      client-type: lettuce
+      port: 6379
+      embedded:
+        enabled: true
 # P6Spy --------------------------------------------------------------------------------------------
 decorator:
   datasource:
     p6spy:
       enable-logging: true
-
+# Servlet ------------------------------------------------------------------------------------------
 server:
   port: 8100
   servlet:
@@ -45,7 +54,7 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-
+# Logging ------------------------------------------------------------------------------------------
 logging:
   charset:
     console: UTF-8
