@@ -61,21 +61,7 @@ public enum Platform {
                 return true;
             }
 
-            try {
-                Process process = Runtime.getRuntime().exec(new String[] {"sysctl", "sysctl.proc_translated"});
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                    // case translated: "sysctl.proc_translated: 1"
-                    // case not translated: "sysctl.proc_translated: 0"
-                    // case not arm64: "unknown old 'sysctl.proc_translated'"
-                    String line = reader.readLine();
-                    if (line != null && (line.endsWith("0") || line.endsWith("1"))) {
-                        return true;
-                    }
-                }
-            } catch (IOException ignored) {
-            }
-
-            return false;
+            return isTranslatedByRosetta();
         }
     },
 
@@ -128,6 +114,25 @@ public enum Platform {
 
     private static String getCurrentArchitecture() {
         return Objects.requireNonNullElse(System.getProperty("os.arch"), "").toLowerCase(Locale.US);
+    }
+
+    private static boolean isTranslatedByRosetta() {
+        try {
+            Process process = Runtime.getRuntime().exec(new String[] {"sysctl", "sysctl.proc_translated"});
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                // case translated: "sysctl.proc_translated: 1"
+                // case not translated: "sysctl.proc_translated: 0"
+                // case not arm64: "unknown old 'sysctl.proc_translated'"
+                String line = reader.readLine();
+                // if (line != null && (line.endsWith("0") || line.endsWith("1"))) {
+                if (line != null && line.strip().matches("sysctl\\.proc_translated: [01]")) {
+                    return true;
+                }
+            }
+        } catch (IOException ignored) {
+        }
+
+        return false;
     }
 
 }

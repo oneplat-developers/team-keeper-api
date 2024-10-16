@@ -16,14 +16,17 @@
 
 package co.oneplat.teamkeeper.redis.embedded.parameter;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.List;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 public class PortParameter implements RedisParameter {
 
     private final int port;
+
+    public PortParameter(int port) {
+        this.port = port == 0 ? findRandomAvailablePort() : port;
+    }
 
     @Override
     public Object getValue() {
@@ -33,6 +36,19 @@ public class PortParameter implements RedisParameter {
     @Override
     public List<String> toArguments() {
         return List.of("--port", String.valueOf(this.port));
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private int findRandomAvailablePort() {
+        // Creates an unbound socket to get a free port.
+        try (ServerSocket socket = new ServerSocket(0)) {
+            // Returns the port that was allocated
+            return socket.getLocalPort();
+        } catch (IOException ignored) {
+            // Returns the unbound port.
+            return -1;
+        }
     }
 
 }
