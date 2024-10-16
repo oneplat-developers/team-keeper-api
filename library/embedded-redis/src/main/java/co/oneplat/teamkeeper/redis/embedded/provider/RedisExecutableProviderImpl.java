@@ -46,7 +46,7 @@ public class RedisExecutableProviderImpl implements RedisExecutableProvider {
 
     private static String resolveFileName() {
         return switch (Platform.getCurrentPlatform()) {
-            case AIX, SOLARIS, LINUX -> "";
+            case AIX, SOLARIS, LINUX -> "binaries/redis-server-7.4.1-linux-x64";
             case MACOS_ARM64 -> "binaries/redis-server-7.4.1-mac-arm64";
             case MACOS_X64 -> "binaries/redis-server-7.4.1-mac-x64";
             case WINDOWS -> "binaries/redis-server-5.0.14.1-win-x64.exe";
