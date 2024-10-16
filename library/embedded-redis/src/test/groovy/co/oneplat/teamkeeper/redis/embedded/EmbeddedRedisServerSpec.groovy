@@ -22,7 +22,7 @@ import io.lettuce.core.RedisClient
 
 class EmbeddedRedisServerSpec extends Specification {
 
-    def "Checks if redis server is bound to random port"() {
+    def "Checks if server is bound to random port"() {
         given:
         def server = EmbeddedRedisServer.builder().port(0).build()
 
@@ -36,12 +36,12 @@ class EmbeddedRedisServerSpec extends Specification {
         server.stop()
     }
 
-    def "test"() {
-        given: "Start redis server"
+    def "Checks if server accepts commands exactly from client"() {
+        given: "Start server"
         def server = EmbeddedRedisServer.builder().port(0).build()
         server.start()
 
-        and: "Create redis client"
+        and: "Create client"
         def port = server.ports().first
         def client = RedisClient.create("redis://localhost:$port")
 
@@ -49,7 +49,7 @@ class EmbeddedRedisServerSpec extends Specification {
         def connection = client.connect()
         def syncCommands = connection.sync()
 
-        when: "Send commands to redis server"
+        when: "Send commands to server"
         def ttl = 500
         syncCommands.psetex("foo", ttl, "bar")
         def value = syncCommands.get("foo")
