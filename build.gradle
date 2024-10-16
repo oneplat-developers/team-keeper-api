@@ -53,6 +53,10 @@ configure(subprojects) {
             dependency 'org.spockframework:spock-core:2.3-groovy-4.0'
             dependency 'org.spockframework:spock-spring:2.3-groovy-4.0'
             dependency 'net.bytebuddy:byte-buddy:1.15.4'
+
+            // Test container for independent test environment.
+            dependency 'org.testcontainers:junit-jupiter:1.20.2'
+            dependency 'org.testcontainers:mysql:1.20.2'
         }
     }
 
@@ -69,6 +73,9 @@ configure(subprojects) {
 
         testImplementation 'org.spockframework:spock-core'
         testImplementation 'net.bytebuddy:byte-buddy'
+        testImplementation ('org.testcontainers:junit-jupiter') {
+            exclude group: 'junit', module: 'junit'
+        }
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         if (isLibraryProject) {
