@@ -16,10 +16,12 @@
 
 package co.oneplat.teamkeeper.redis.embedded
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import io.lettuce.core.RedisClient
 
+@Ignore("Replaced with 'com.github.codemonstur:embedded-redis'")
 class EmbeddedRedisServerSpec extends Specification {
 
     def "Checks if server is bound to random port"() {

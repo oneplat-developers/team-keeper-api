@@ -41,8 +41,7 @@ configure(subprojects) {
     dependencyManagement {
         dependencies {
             // Embedded redis.
-            dependency 'it.ozimov:embedded-redis:0.7.3'
-            dependency 'io.lettuce:lettuce-core:6.3.2.RELEASE'
+            dependency 'com.github.codemonstur:embedded-redis:1.4.3'
 
             // DataSource proxy for logging JPA parameters.
             dependency 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2'
@@ -92,7 +91,7 @@ configure(subprojects) {
 
         // Redis
         implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-        implementation project(':library.embedded-redis')
+        implementation 'com.github.codemonstur:embedded-redis'
 
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
