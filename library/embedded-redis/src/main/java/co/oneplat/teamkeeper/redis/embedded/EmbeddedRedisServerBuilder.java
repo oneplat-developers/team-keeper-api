@@ -20,66 +20,84 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
 import redis.embedded.RedisServerBuilder;
 
+import co.oneplat.teamkeeper.redis.embedded.parameter.AppendOnlyParameter;
+import co.oneplat.teamkeeper.redis.embedded.parameter.BindParameter;
+import co.oneplat.teamkeeper.redis.embedded.parameter.DaemonizeParameter;
+import co.oneplat.teamkeeper.redis.embedded.parameter.ExecutableProvisionParameter;
+import co.oneplat.teamkeeper.redis.embedded.parameter.MaxMemoryParameter;
+import co.oneplat.teamkeeper.redis.embedded.parameter.PortParameter;
+import co.oneplat.teamkeeper.redis.embedded.parameter.RedisParameter;
+import co.oneplat.teamkeeper.redis.embedded.parameter.RedisParameterStore;
+import co.oneplat.teamkeeper.redis.embedded.parameter.SaveParameter;
 import co.oneplat.teamkeeper.redis.embedded.provider.RedisExecutableProvider;
 import co.oneplat.teamkeeper.redis.embedded.provider.RedisExecutableProviderImpl;
+
+import static java.util.function.Predicate.*;
 
 /**
  * @see RedisServerBuilder
  */
 public class EmbeddedRedisServerBuilder {
 
-    private RedisExecutableProvider provider;
+    private final RedisParameterStore parameterStore;
 
-    private String bind;
-
-    private Integer port;
-
-    private boolean daemonize;
-
-    private List<String> saves;
-
-    private boolean appendOnly;
-
-    private int maxMemory;
+    public EmbeddedRedisServerBuilder() {
+        this.parameterStore = new RedisParameterStore();
+    }
 
     private List<String> modulePaths;
 
-    // Building ----------------------------------------------------------------------------------------
+    // Parameters --------------------------------------------------------------------------------------
 
     public EmbeddedRedisServerBuilder provider(RedisExecutableProvider provider) {
-        this.provider = provider;
+        this.parameterStore.set(new ExecutableProvisionParameter(provider));
         return this;
     }
 
     public EmbeddedRedisServerBuilder bind(String bind) {
-        this.bind = bind;
+        this.parameterStore.set(new BindParameter(bind));
         return this;
     }
 
     public EmbeddedRedisServerBuilder port(int port) {
-        this.port = port;
+        this.parameterStore.set(new PortParameter(port));
+        return this;
+    }
+
+    public EmbeddedRedisServerBuilder saves(@Nullable List<String> saves) {
+        if (saves == null || saves.isEmpty()) {
+            this.parameterStore.set(new SaveParameter());
+        } else {
+            saves.stream()
+                    .filter(not(String::isBlank))
+                    .map(String::strip)
+                    .distinct()
+                    .map(it -> {
+                        String[] strings = it.split(" ");
+                        return new SaveParameter(Integer.parseInt(strings[0]), Integer.parseInt(strings[1]));
+                    })
+                    .forEach(this.parameterStore::add);
+        }
+
         return this;
     }
 
     public EmbeddedRedisServerBuilder daemonize(boolean daemonize) {
-        this.daemonize = daemonize;
-        return this;
-    }
-
-    public EmbeddedRedisServerBuilder saves(List<String> saves) {
-        this.saves = saves;
+        this.parameterStore.set(new DaemonizeParameter(daemonize));
         return this;
     }
 
     public EmbeddedRedisServerBuilder appendOnly(boolean appendOnly) {
-        this.appendOnly = appendOnly;
+        this.parameterStore.set(new AppendOnlyParameter(appendOnly));
         return this;
     }
 
-    public EmbeddedRedisServerBuilder maxMemory(int maxMemory) {
-        this.maxMemory = maxMemory;
+    public EmbeddedRedisServerBuilder maxMemory(int maxMemory, char unit) {
+        this.parameterStore.set(new MaxMemoryParameter(maxMemory, unit));
         return this;
     }
 
@@ -98,44 +116,41 @@ public class EmbeddedRedisServerBuilder {
         return this;
     }
 
-    // ---------- --------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------
 
     public EmbeddedRedisServer build() {
-        if (this.provider == null) {
+        setupNotConfiguredParameters();
+
+        List<Class<? extends RedisParameter>> parameterTypes = List.of(
+                ExecutableProvisionParameter.class,
+                BindParameter.class,
+                PortParameter.class,
+                SaveParameter.class,
+                DaemonizeParameter.class,
+                AppendOnlyParameter.class,
+                MaxMemoryParameter.class
+        );
+
+        List<String> arguments = new ArrayList<>();
+        for (Class<? extends RedisParameter> parameterType : parameterTypes) {
+            List<? extends RedisParameter> parameters = this.parameterStore.getParameters(parameterType);
+            parameters.forEach(it -> arguments.addAll(it.toArguments()));
+        }
+
+        PortParameter portParameter = this.parameterStore.getParameters(PortParameter.class).getFirst();
+        int port = Integer.parseInt(String.valueOf(portParameter.getValue()));
+
+        return new EmbeddedRedisServer(port, List.copyOf(arguments));
+    }
+
+    private void setupNotConfiguredParameters() {
+        if (!this.parameterStore.has(ExecutableProvisionParameter.class)) {
             provider(new RedisExecutableProviderImpl());
-        }
-
-        if (this.bind == null) {
-            bind("127.0.0.1");
-        }
-
-        if (this.port == null) {
-            port(EmbeddedRedisServer.DEFAULT_PORT);
-        }
-
-        if (this.maxMemory == 0) {
-            maxMemory(128);
         }
 
         if (this.modulePaths == null) {
             loadModules(Collections.emptyList());
         }
-
-        List<String> args = new ArrayList<>();
-        args.add(this.provider.getExecutablePath().toAbsolutePath().toString());
-        args.addAll(List.of("--bind", this.bind));
-        args.addAll(List.of("--port", String.valueOf(this.port)));
-        args.addAll(List.of("--daemonize", this.daemonize ? "yes" : "no"));
-        if (this.saves != null) {
-            this.saves.forEach(it -> args.addAll(List.of("--save", it)));
-        }
-        args.addAll(List.of("--appendonly", this.appendOnly ? "yes" : "no"));
-        args.addAll(List.of("--maxmemory", this.maxMemory + "M"));
-        if (!this.modulePaths.isEmpty()) {
-            args.addAll(List.of("--loadmodule", String.join(" ", this.modulePaths)));
-        }
-
-        return new EmbeddedRedisServer(this.port, List.copyOf(args));
     }
 
 }

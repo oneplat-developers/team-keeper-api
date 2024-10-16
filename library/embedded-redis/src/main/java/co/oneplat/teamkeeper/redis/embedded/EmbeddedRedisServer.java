@@ -19,28 +19,19 @@ package co.oneplat.teamkeeper.redis.embedded;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import lombok.extern.slf4j.Slf4j;
 import redis.embedded.RedisServer;
 
 import co.oneplat.teamkeeper.redis.embedded.provider.RedisExecutableProvider;
-import co.oneplat.teamkeeper.redis.embedded.provider.RedisExecutableProviderImpl;
 
 /**
  * @see RedisServer
  */
-@Slf4j
 public class EmbeddedRedisServer extends AbstractRedisInstance {
 
     private static final Pattern REDIS_READY_PATTERN = Pattern.compile(
             ".*Ready to accept connections.*", Pattern.CASE_INSENSITIVE);
 
-    public static final int DEFAULT_PORT = 6379;
-
     public static final int RANDOM_PORT = 0;
-
-    public EmbeddedRedisServer(int port) {
-        this(port, new RedisExecutableProviderImpl());
-    }
 
     public EmbeddedRedisServer(int port, RedisExecutableProvider provider) {
         super(port, List.of(
