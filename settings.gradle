@@ -1,15 +1,23 @@
+import java.util.regex.Pattern
+
+final def DELIMITER = '.'
+
 rootProject.name = 'team-keeper'
 
 include(
-        ':common',
-        ':tester',
-        ':entity',
-        ':attendance',
+        "library${DELIMITER}embedded-redis",
+        "module${DELIMITER}common",
+        "module${DELIMITER}tester",
+        "module${DELIMITER}entity",
+        "module${DELIMITER}attendance",
 )
 
-rootProject.children.each {it ->
-    // Enables to refer to each project without parent directory.
-    it.projectDir = file("module/$it.name")
-    // Changes build filename of subprojects.
-    it.buildFileName = "$it.name-build.gradle"
+rootProject.children.each { it ->
+    def strings = it.name.split(Pattern.quote(DELIMITER))
+    def parentDirectory = strings[0]
+    def projectName = strings[1]
+
+    // Enables to refer to each project.
+    it.projectDir = file("$parentDirectory/$projectName")
+    it.buildFileName = "$projectName-build.gradle"
 }

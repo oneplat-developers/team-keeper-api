@@ -35,10 +35,14 @@ allprojects {
 }
 
 configure(subprojects) {
-    final def isRunnableProject = Boolean.parseBoolean(project.property('project.runnable').toString())
+    final def isLibraryProject = project.name.startsWith('library.')
+    final def isRunnableProject = !isLibraryProject && Boolean.parseBoolean(project.property('project.runnable').toString())
 
     dependencyManagement {
         dependencies {
+            // Embedded redis.
+            dependency 'it.ozimov:embedded-redis:0.7.3'
+
             // DataSource proxy for logging JPA parameters.
             dependency 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2'
 
@@ -53,13 +57,7 @@ configure(subprojects) {
     }
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter'
-        implementation('org.springframework.boot:spring-boot-starter-web') {
-            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-        }
-        implementation 'org.springframework.boot:spring-boot-starter-undertow'
-
-        compileOnly 'org.jetbrains:annotations'
+        // Modules and libraries ---------------------------------------------------------------------------
 
         // Lombok
         compileOnly 'org.projectlombok:lombok'
@@ -67,28 +65,51 @@ configure(subprojects) {
         testCompileOnly 'org.projectlombok:lombok'
         testAnnotationProcessor 'org.projectlombok:lombok'
 
-        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+        compileOnly 'org.jetbrains:annotations'
 
-        if (isRunnableProject) {
-            // Query DSL: http://honeymon.io/tech/2020/07/09/gradle-annotation-processor-with-querydsl.html
-            implementation "com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-            annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-            annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
-            annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
-
-            // Uses h2 database on local environment.
-            runtimeOnly 'com.h2database:h2'
-            // Uses MariaDB database on AWS cloud environment.
-            runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-
-            testImplementation project(':tester')
-        }
-
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.spockframework:spock-core'
-        testImplementation 'org.spockframework:spock-spring'
         testImplementation 'net.bytebuddy:byte-buddy'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+        if (isLibraryProject) {
+            return
+        }
+
+        // Modules -----------------------------------------------------------------------------------------
+
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation('org.springframework.boot:spring-boot-starter-web') {
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+        }
+        implementation 'org.springframework.boot:spring-boot-starter-undertow'
+
+        // Redis
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+        implementation project(':library.embedded-redis')
+
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.spockframework:spock-spring'
+
+        if (!isRunnableProject) {
+            return
+        }
+
+        // Runnable modules --------------------------------------------------------------------------------
+
+        // Query DSL: http://honeymon.io/tech/2020/07/09/gradle-annotation-processor-with-querydsl.html
+        implementation "com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+        annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+        annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+        annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+
+        // Uses H2 database on local environment.
+        runtimeOnly 'com.h2database:h2'
+        // Uses MariaDB database on AWS cloud environment.
+        runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+        testImplementation project(':module.tester')
     }
 
     tasks.withType(JavaCompile).configureEach {
@@ -105,16 +126,18 @@ configure(subprojects) {
         useJUnitPlatform()
     }
 
+    final def simpleProjectName = project.name.substring(project.name.indexOf('.') + 1)
+
     // Enables subprojects to build plain jar file; It needed to refer to other modules on another module.
     // See https://github.com/HomoEfficio/dev-tips/blob/master/Gradle-error-package-does-not-exist.md
     jar {
         enabled = true
+        archiveFileName = "$rootProject.name-$simpleProjectName-${project.version}.plain.jar"
     }
 
     bootJar {
         enabled = isRunnableProject
-        archiveBaseName = "$rootProject.name-$project.name"
-        archiveVersion = "$project.version"
+        archiveFileName = "$rootProject.name-$simpleProjectName-${project.version}.jar"
     }
 }
 
