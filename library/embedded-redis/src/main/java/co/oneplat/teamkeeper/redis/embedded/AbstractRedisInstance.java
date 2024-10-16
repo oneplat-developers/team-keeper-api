@@ -133,7 +133,7 @@ public abstract class AbstractRedisInstance implements Redis {
         if (this.executor != null && !this.executor.isShutdown()) {
             this.executor.shutdown();
             try {
-                this.executor.awaitTermination(10, TimeUnit.SECONDS);
+                this.executor.awaitTermination(3, TimeUnit.SECONDS);
             } catch (InterruptedException ignored) {
             }
         }
