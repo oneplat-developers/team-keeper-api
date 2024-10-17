@@ -16,7 +16,7 @@
 
 package co.oneplat.teamkeeper.common.configuration.redis.embedded;
 
-import java.util.List;
+import java.io.IOException;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -31,8 +31,7 @@ import org.springframework.data.redis.core.RedisOperations;
 
 import lombok.extern.slf4j.Slf4j;
 import redis.embedded.Redis;
-
-import co.oneplat.teamkeeper.redis.embedded.EmbeddedRedisServer;
+import redis.embedded.RedisServer;
 
 @Slf4j
 @Configuration(proxyBeanMethods = false)
@@ -44,15 +43,16 @@ public class EmbeddedRedisAutoConfiguration {
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     @ConditionalOnMissingBean(Redis.class)
-    Redis embeddedRedisInstance(RedisProperties redisProperties) {
-        log.debug("Starting embedded redis server");
+    Redis embeddedRedisInstance(RedisProperties redisProperties) throws IOException {
+        log.info("Embedded redis server auto configured.");
 
-        return EmbeddedRedisServer.builder()
+        return RedisServer.newRedisServer()
+                .bind("localhost")
                 .port(redisProperties.getPort())
-                .daemonize(false)
-                .saves(List.of())
-                .appendOnly(false)
-                .maxMemory(256)
+                .setting("save")
+                .setting("daemonize no")
+                .setting("appendonly no")
+                .setting("maxmemory 256M")
                 .build();
     }
 

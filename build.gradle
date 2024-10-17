@@ -41,7 +41,7 @@ configure(subprojects) {
     dependencyManagement {
         dependencies {
             // Embedded redis.
-            dependency 'it.ozimov:embedded-redis:0.7.3'
+            dependency 'com.github.codemonstur:embedded-redis:1.4.3'
 
             // DataSource proxy for logging JPA parameters.
             dependency 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2'
@@ -50,9 +50,12 @@ configure(subprojects) {
             dependency 'org.jetbrains:annotations:26.0.0'
 
             // Spockframework with groovy.
-            dependency 'org.spockframework:spock-core:2.3-groovy-4.0'
-            dependency 'org.spockframework:spock-spring:2.3-groovy-4.0'
-            dependency 'net.bytebuddy:byte-buddy:1.15.4'
+            dependency 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
+            dependency 'org.spockframework:spock-spring:2.4-M4-groovy-4.0'
+
+            // Test container for independent test environment.
+            dependency 'org.testcontainers:junit-jupiter:1.20.2'
+            dependency 'org.testcontainers:mysql:1.20.2'
         }
     }
 
@@ -68,7 +71,10 @@ configure(subprojects) {
         compileOnly 'org.jetbrains:annotations'
 
         testImplementation 'org.spockframework:spock-core'
-        testImplementation 'net.bytebuddy:byte-buddy'
+        testImplementation 'org.mockito:mockito-core'
+        testImplementation ('org.testcontainers:junit-jupiter') {
+            exclude group: 'junit', module: 'junit'
+        }
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         if (isLibraryProject) {
@@ -85,7 +91,7 @@ configure(subprojects) {
 
         // Redis
         implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-        implementation project(':library.embedded-redis')
+        implementation 'com.github.codemonstur:embedded-redis'
 
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
