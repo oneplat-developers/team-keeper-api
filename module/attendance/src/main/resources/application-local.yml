@@ -4,6 +4,22 @@ spring:
   config:
     activate:
       on-profile: local
+
+  # Security -----------------------------------------------------------------------------------------
+  security:
+    oauth2:
+      client:
+        google:
+          client-id: clientId
+          client-secret: clientSecret
+          redirect-uri: redirect-uri
+          authorization-grant-type: authorization_code
+          scope:
+            - email
+            - profile
+          url:
+            access-token: https://oauth2.googleapis.com/token
+            profile: https://www.googleapis.com/userinfo/v2/me
   # H2 Database --------------------------------------------------------------------------------------
   datasource:
     hikari:
@@ -39,7 +55,7 @@ spring:
       client-type: lettuce
       port: 6379
       embedded:
-        enabled: true
+        enabled: false
 # P6Spy --------------------------------------------------------------------------------------------
 decorator:
   datasource:
