@@ -19,15 +19,57 @@ package co.oneplat.teamkeeper.common.configuration.redis.embedded;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.RequiredArgsConstructor;
 
-@Getter
-@Setter
-@ToString
+/**
+ * @param enabled 내장 레디스 활성화 여부
+ * @param daemonize 데몬 프로세스 실행 여부
+ * @param appendOnly AOF 여부
+ * @param maxMemory 최대 메모리 허용량
+ */
 @ConfigurationProperties(prefix = "spring.data.redis.embedded")
-public class EmbeddedRedisProperties {
+public record EmbeddedRedisProperties(
+        boolean enabled,
+        boolean daemonize,
+        boolean appendOnly,
+        MaxMemory maxMemory
+) {
 
-    private boolean enabled;
+    public EmbeddedRedisProperties {
+        if (maxMemory == null) {
+            maxMemory = new MaxMemory(128, Unit.MB);
+        }
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    /**
+     * @param capacity 허용량
+     * @param unit 단위
+     */
+    public record MaxMemory(Integer capacity, Unit unit) {
+        public MaxMemory {
+            if (capacity == null) {
+                throw new IllegalArgumentException("MaxMemory.capacity cannot be null.");
+            }
+            if (capacity <= 0) {
+                throw new IllegalArgumentException("MaxMemory.capacity must be positive.");
+            }
+            if (unit == null) {
+                throw new IllegalArgumentException("MaxMemory.unit cannot be null.");
+            }
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum Unit {
+        BYTE(""),
+        KB("K"),
+        MB("M"),
+        GB("G");
+
+        private final String value;
+    }
 
 }

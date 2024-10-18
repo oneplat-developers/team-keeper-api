@@ -43,16 +43,16 @@ public class EmbeddedRedisAutoConfiguration {
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     @ConditionalOnMissingBean(Redis.class)
-    Redis embeddedRedisInstance(RedisProperties redisProperties) throws IOException {
+    Redis embeddedRedisInstance(RedisProperties redis, EmbeddedRedisProperties embedded) throws IOException {
         log.info("Embedded redis server auto configured.");
 
         return RedisServer.newRedisServer()
-                .bind("localhost")
-                .port(redisProperties.getPort())
-                .setting("save")
-                .setting("daemonize no")
-                .setting("appendonly no")
-                .setting("maxmemory 256M")
+                .bind(redis.getHost())
+                .port(redis.getPort())
+                .setting("save ''") // Disable the saving of data to a RDB file.
+                .setting("daemonize %s".formatted(embedded.daemonize() ? "yes" : "no"))
+                .setting("appendonly %s".formatted(embedded.appendOnly() ? "yes" : "no"))
+                .setting("maxmemory %d%s".formatted(embedded.maxMemory().capacity(), embedded.maxMemory().unit()))
                 .build();
     }
 
