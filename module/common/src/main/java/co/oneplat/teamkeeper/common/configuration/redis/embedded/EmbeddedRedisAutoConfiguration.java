@@ -49,7 +49,7 @@ public class EmbeddedRedisAutoConfiguration {
         return RedisServer.newRedisServer()
                 .bind("localhost")
                 .port(redisProperties.getPort())
-                .setting("save")
+                .setting("save ''")
                 .setting("daemonize no")
                 .setting("appendonly no")
                 .setting("maxmemory 256M")
